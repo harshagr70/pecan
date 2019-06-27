@@ -5,7 +5,7 @@
 \title{updateState.LPJGUESS}
 \usage{
 \method{update}{state.LPJGUESS}(model.state, dens.initial, dens.target,
-  cmass.initial, cmass.target, HEIGHT_MAX = 150)
+  cmass.initial, cmass.target, AGSB.epsilon, HEIGHT_MAX = 150)
 }
 \arguments{
 \item{model.state}{A large multiply-nested list containing the entire LPJ-GUESS state as read by 
@@ -19,17 +19,21 @@ using state data assimilation from function XXXXXX.}
 with one entry per PFT/species, with the names being the PFT/species codes.  These values should be produced
 using state data assimilation from function XXXXXX}
 
+\item{cmass.initial}{A numeric vector of the target stand-level biomasses (kgC/m^2) as named numeric vector 
+with one entry per PFT/species, with the names being the PFT/species codes.  These values should be produced
+using state data assimilation from function XXXXXX}
+
 \item{cmass.target}{A numeric vector of the target stand-level biomasses (kgC/m^2) as named numeric vector 
 with one entry per PFT/species, with the names being the PFT/species codes.  These values should be produced
 using state data assimilation from function XXXXXX}
+
+\item{AGSB.epsilon}{A single numeric specifying how close the final above ground stem biomass needs to be to the target
+above ground stem biomass for each individual.  eg. 0.05 requires that the final above ground stem biomass is within 5%
+of the target above ground stem biomass}
 
 \item{HEIGHT_MAX}{Maximum allowed height of an individual.  This is the maximum height that a tree
 can have.  This is hard-coded in LPJ-GUESS to 150 m, but for SDA that might be unrealistically big, 
 so this argument allows adjustment.}
-
-\item{cmass.target}{A numeric vector of the target stand-level biomasses (kgC/m^2) as named numeric vector 
-with one entry per PFT/species, with the names being the PFT/species codes.  These values should be produced
-using state data assimilation from function XXXXXX}
 }
 \value{
 And updated model state (as a big old list o' lists)

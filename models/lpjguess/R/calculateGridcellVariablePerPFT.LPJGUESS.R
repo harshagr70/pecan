@@ -46,13 +46,12 @@ calculateGridcellVariablePerPFT <- function(model.state, variable) {
     gc.sum <- numeric(length(model.state$Stand[[stand.counter]]$Standpft$active))
    
     # loop through each patch
-    print(length(model.state$Stand[[stand.counter]]$Patch))
     for(patch.counter in 1:npatches) {
 
       
-      print("-------------------------------------------------------------------------------------")
-      print(paste("--------------------------------  PATCH ", patch.counter, " -------------------------------------"))
-      print("-------------------------------------------------------------------------------------")
+      #print("-------------------------------------------------------------------------------------")
+      #print(paste("--------------------------------  PATCH ", patch.counter, " -------------------------------------"))
+      #print("-------------------------------------------------------------------------------------")
       
       
       this.patch <- model.state$Stand[[stand.counter]]$Patch[[patch.counter]]
@@ -71,8 +70,8 @@ calculateGridcellVariablePerPFT <- function(model.state, variable) {
         # print(paste("sap =" , this.individual$cmass_sap))
         # print(paste("heart =" , this.individual$cmass_heart)) 
         # print(paste("debt =" , this.individual$cmass_debt)) 
-        print(paste("alive =" , this.individual$alive)) 
-        print(individual.counter)
+        #print(paste("alive =" , this.individual$alive)) 
+        #print(individual.counter)
       
         if(this.individual$alive) {
           
@@ -89,14 +88,13 @@ calculateGridcellVariablePerPFT <- function(model.state, variable) {
             gc.sum[pft.index] <- gc.sum[pft.index] + (this.individual$cmass_leaf+this.individual$cmass_root+this.individual$cmass_heart+this.individual$cmass_sap-this.individual$cmass_debt)/npatches
             
             
-            print(paste("id = ", this.individual$indiv.pft.id))
-            print(paste("leaf =" , this.individual$cmass_leaf))
-            print(paste("root =" , this.individual$cmass_root))
-            print(paste("sap =" , this.individual$cmass_sap))
-            print(paste("heart =" , this.individual$cmass_heart)) 
-            print(paste("debt =" , this.individual$cmass_debt)) 
-            
-            print(gc.sum) 
+            # print(paste("id = ", this.individual$indiv.pft.id))
+            # print(paste("leaf =" , this.individual$cmass_leaf))
+            # print(paste("root =" , this.individual$cmass_root))
+            # print(paste("sap =" , this.individual$cmass_sap))
+            # print(paste("heart =" , this.individual$cmass_heart)) 
+            # print(paste("debt =" , this.individual$cmass_debt)) 
+            # print(gc.sum) 
            
             
          }
