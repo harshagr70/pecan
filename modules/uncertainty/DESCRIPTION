@@ -1,8 +1,7 @@
 Package: PEcAn.uncertainty
 Type: Package
 Title: PEcAn Functions Used for Propagating and Partitioning Uncertainties in Ecological Forecasts and Reanalysis
-Version: 1.7.2.9000
-Date: 2021-10-04
+Version: 1.8.0.9000
 Authors@R: c(person("Mike", "Dietze", role = c("aut"),
                      email = "dietze@bu.edu"),
              person("David", "LeBauer", role = c("aut", "cre"),
@@ -27,10 +26,8 @@ Description: The Predictive Ecosystem Carbon Analyzer
     PECAn is to streamline the interaction between data and
     models, and to improve the efficacy of scientific
     investigation.
-Depends:
 Imports:
     dplyr,
-    ggmap,
     ggplot2,
     gridExtra,
     PEcAn.DB,
@@ -50,4 +47,4 @@ Copyright: Authors
 LazyLoad: yes
 LazyData: FALSE
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2

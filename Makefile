@@ -6,8 +6,8 @@ MODELS := basgra biocro clm45 dalec dvmdostem ed fates gday jules linkages \
 				ldndc lpjguess maat maespa preles sibcasa sipnet stics template
 
 MODULES := allometry assim.batch assim.sequential benchmark \
-				 data.atmosphere data.hydrology data.land \
-				 data.remote emulator meta.analysis \
+				 data.atmosphere data.land data.remote \
+				 emulator meta.analysis \
 				 photosynthesis priors rtm uncertainty
 
 # Components not currently included in the build
@@ -46,7 +46,7 @@ ALL_PKGS_D := $(BASE_D) $(MODULES_D) $(MODELS_D)
 
 SETROPTIONS := "options(Ncpus = ${NCPUS})"
 
-EXPECTED_ROXYGEN_VERSION := 7.2.3
+EXPECTED_ROXYGEN_VERSION := 7.3.2
 INSTALLED_ROXYGEN_VERSION := $(shell Rscript \
 	-e "if (requireNamespace('roxygen2', quietly = TRUE)) {" \
 	-e   "cat(as.character(packageVersion('roxygen2')))" \
@@ -67,6 +67,11 @@ drop_parents = $(filter-out $(patsubst %/,%,$(dir $1)), $1)
 # Generates a list of regular files at any depth inside its argument
 files_in_dir = $(call drop_parents, $(call recurse_dir, $1))
 
+# Git hash + clean status for this directory
+git_rev = $(shell \
+	CLEAN=$$([[ -n $$(git status -s $1) ]] && echo "+mod"); \
+	echo $$(git rev-parse --short=10 HEAD)"$$CLEAN")
+
 # HACK: NA vs TRUE switch on dependencies argument is an ugly workaround for
 # a circular dependency between benchmark and data.land.
 # When this is fixed, can go back to simple `dependencies = TRUE`
@@ -74,7 +79,8 @@ depends_R_pkg = ./scripts/time.sh "depends ${1}" ./scripts/confirm_deps.R ${1} \
 	$(if $(findstring modules/benchmark,$(1)),NA,TRUE)
 install_R_pkg = ./scripts/time.sh "install ${1}" Rscript \
 	-e ${SETROPTIONS} \
-	-e "devtools::install('$(strip $(1))', upgrade=FALSE)"
+	-e "Sys.setenv(PECAN_GIT_REV='$(call git_rev,$1)')" \
+	-e "remotes::install_local('$(strip $(1))', force=TRUE, dependencies=FALSE, upgrade=FALSE)"
 check_R_pkg = ./scripts/time.sh "check ${1}" Rscript scripts/check_with_errors.R $(strip $(1))
 test_R_pkg = ./scripts/time.sh "test ${1}" Rscript \
 	-e "devtools::test('$(strip $(1))'," \
@@ -96,9 +102,18 @@ depends = .doc/$(1) .install/$(1) .check/$(1) .test/$(1)
 
 ### Rules
 
-.PHONY: all install check test document shiny
+.PHONY: all install check test document shiny \
+            check_base check_models check_modules 
 
 all: install document
+
+
+check_base: $(BASE_C) 
+check_models: $(MODELS_C) 
+
+# Install base first as Modules has a circular dependency on base,
+# and then run a check on modules
+check_modules: $(BASE_I) $(MODULES_C) 
 
 document: $(ALL_PKGS_D) .doc/base/all
 install: $(ALL_PKGS_I) .install/base/all
@@ -123,12 +138,6 @@ $(subst .doc/models/template,,$(MODELS_D)): .install/models/template
 ### Order-only dependencies
 # (i.e. prerequisites must exist before building target, but
 # target need not be rebuilt when a prerequisite changes)
-
-.doc/base/all: | $(ALL_PKGS_D)
-.install/base/all: | $(ALL_PKGS_I)
-.check/base/all: | $(ALL_PKGS_C)
-.test/base/all: | $(ALL_PKGS_T)
-
 include Makefile.depends
 
 clean:
@@ -143,10 +152,11 @@ clean:
 .install/roxygen2: | .install .install/devtools
 	+ ./scripts/time.sh "roxygen2 ${1}" Rscript -e ${SETROPTIONS} \
 		-e "if (!requireNamespace('roxygen2', quietly = TRUE)" \
-		-e "    || packageVersion('roxygen2') != '7.2.3') {" \
-		-e "  devtools::install_github('r-lib/roxygen2@v7.2.3')" \
+		-e "    || packageVersion('roxygen2') != '"${EXPECTED_ROXYGEN_VERSION}"') {" \
+		-e "  cran <- c(getOption('repos'), 'cloud.r-project.org')" \
+		-e "  remotes::install_version('roxygen2', '"${EXPECTED_ROXYGEN_VERSION}"', repos = cran, upgrade = FALSE)" \
 		-e "}"
-	$(eval INSTALLED_ROXYGEN_VERSION := 7.2.3)
+	$(eval INSTALLED_ROXYGEN_VERSION := ${EXPECTED_ROXYGEN_VERSION})
 	echo `date` > $@
 
 .install/testthat: | .install

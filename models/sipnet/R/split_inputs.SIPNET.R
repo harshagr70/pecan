@@ -1,12 +1,3 @@
-#-------------------------------------------------------------------------------
-# Copyright (c) 2012 University of Illinois, NCSA.
-# All rights reserved. This program and the accompanying materials
-# are made available under the terms of the 
-# University of Illinois/NCSA Open Source License
-# which accompanies this distribution, and is available at
-# http://opensource.ncsa.illinois.edu/license.html
-#-------------------------------------------------------------------------------
-
 ## split clim file into smaller time units to use in KF
 ##' @title split_inputs.SIPNET
 ##' @name  split_inputs.SIPNET
@@ -21,6 +12,8 @@
 ##' @description Splits climate met for SIPNET
 ##' 
 ##' @return file split up climate file
+##'
+##' @importFrom dplyr %>%
 ##' @export
 split_inputs.SIPNET <- function(settings, start.time, stop.time, inputs, overwrite = FALSE, outpath = NULL) {
   #### Get met paths

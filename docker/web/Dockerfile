@@ -1,5 +1,4 @@
-FROM php:7-apache
-MAINTAINER Rob Kooper <kooper@illinois.edu>
+FROM php:8-apache
 
 # ----------------------------------------------------------------------
 # install rabbitmq and postgresql extentions

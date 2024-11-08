@@ -33,7 +33,6 @@ $offline=isset($_REQUEST['offline']);
 $pecan_edit = (isset($_REQUEST['pecan_edit'])) ? "checked" : "";
 $adv_setup = (isset($_REQUEST['adv_setup'])) ? "checked" : "";
 $model_edit = (isset($_REQUEST['model_edit'])) ? "checked" : "";
-$browndog = (isset($_REQUEST['browndog'])) ? "checked" : "";
 $ensemble_analysis = (isset($_REQUEST['ensemble_analsysis'])) ? "checked" : "";
 $sensitivity_analysis = (isset($_REQUEST['sensitivity'])) ? "checked" : "";
 
@@ -53,7 +52,7 @@ if (!isset($_REQUEST['hostname'])) {
 }
 $hostname=$_REQUEST['hostname'];
 if (!array_key_exists($hostname, $hostlist)) {
-  die("${hostname} is not an approved host");
+  die("{$hostname} is not an approved host");
 }
 $hostoptions = $hostlist[$hostname];
 
@@ -187,14 +186,14 @@ if (isset($modelinfo['revision'])) {
 <?php foreach($_REQUEST as $key => $value){
         if(is_array($value)) {
           foreach($value as $v) {
-            echo "<input name=\"${key}[]\" id=\"${key}[]\" type=\"hidden\" value=\"${v}\"/>";
+            echo "<input name=\"{$key}[]\" id=\"{$key}[]\" type=\"hidden\" value=\"{$v}\"/>";
           }   
         } else {
           if(strcmp($key, "notes") == 0) {
             $str = htmlentities($value, ENT_QUOTES);
-            echo "<input name=\"${key}\" id=\"${key}\" type=\"hidden\" value=\"${str}\"/>";
+            echo "<input name=\"{$key}\" id=\"{$key}\" type=\"hidden\" value=\"{$str}\"/>";
           } else {
-            echo "<input name=\"${key}\" id=\"${key}\" type=\"hidden\" value=\"${value}\"/>";
+            echo "<input name=\"{$key}\" id=\"{$key}\" type=\"hidden\" value=\"{$value}\"/>";
           }
         }
       }
@@ -211,14 +210,14 @@ if (isset($modelinfo['revision'])) {
 <?php foreach($_REQUEST as $key => $value){
 	if(is_array($value)) {
 	  foreach($value as $v) {
-	    echo "<input name=\"${key}[]\" id=\"${key}[]\" type=\"hidden\" value=\"${v}\"/>";
+	    echo "<input name=\"{$key}[]\" id=\"{$key}[]\" type=\"hidden\" value=\"{$v}\"/>";
 	  }
 	} else {
           if(strcmp($key, "notes") == 0) {
             $str = htmlentities($value, ENT_QUOTES);
-            echo "<input name=\"${key}\" id=\"${key}\" type=\"hidden\" value=\"${str}\"/>";
+            echo "<input name=\"{$key}\" id=\"{$key}\" type=\"hidden\" value=\"{$str}\"/>";
           } else {
-            echo "<input name=\"${key}\" id=\"${key}\" type=\"hidden\" value=\"${value}\"/>";
+            echo "<input name=\"{$key}\" id=\"{$key}\" type=\"hidden\" value=\"{$value}\"/>";
           }
 	}
       }
@@ -228,7 +227,7 @@ if (isset($modelinfo['revision'])) {
       <label>Runs<sup>*</sup></label></span>
       <input type="text" name="runs" id="runs" value="<?php echo 1; ?>" onChange="validate();"/>
       <div class="spacer"></div>
-      <a href="https://pecanproject.github.io/pecan-documentation/master/model-output-variables.html" title="Model output variables to run analyses on. Link opens variable name table">
+      <a href="https://pecanproject.github.io/pecan-documentation/latest/model-output-variables.html" title="Model output variables to run analyses on. Link opens variable name table">
       <label>Variables<sup>*</sup></label></a>
       <input type="text" name="variables" id="variables" value="<?php echo "NPP"; ?>" onChange="validate();"/>
       <div class="spacer"></div>
@@ -263,16 +262,6 @@ if (isset($modelinfo['revision'])) {
   <div id="footer"><?php echo get_footer(); ?></div>
 </div>
 
-<script type="text/javascript" src="js/browndog.js"></script>
-<script type="text/javascript">
-  $('#browndog').click(function(){
-    if($(this).is(':checked')){
-      browndog_add();
-    } else {
-      browndog_del();      
-    }
-  });
-</script>
 </body>
 </html>
 

@@ -1,4 +1,12 @@
-# PEcAn.data.land 1.7.2.9000
+# PEcAn.data.land 1.8.0.9000
+
+- Dependency `datapack` is now optional. It is only used by `dataone_download()` (#3373).
+
+# PEcAn.data.land 1.8.0
+
+## Added
+
+* New function `soilgrids_soilC_extract` retrieves soil C estimates with uncertainty from the ISRIC SoilGrids 250m data. (#3040, @Qianyuxuan)
 
 ## Fixed
 
@@ -8,6 +16,7 @@
 ## Removed
 
 * `find.land()` has been removed. It is not used anywhere we know if, has apparently not been working for some time, and relied on the `maptools` package which is scheduled for retirement.
+* Removed dependency on `PEcAn.data.atmosphere`, notably by retrieving site latitude and longitude directly from `PEcAn.DB::query.site` instead of custom lookups (#3300, Abhinav Pandey).
 
 # PEcAn.data.land 1.7.1
 

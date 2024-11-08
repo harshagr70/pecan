@@ -47,10 +47,10 @@ ic_process <- function(settings, input, dir, overwrite = FALSE){
 
   # set up bety connection
   con <- PEcAn.DB::db.open(dbparms$bety)
-  on.exit(db.close(con), add = TRUE)
+  on.exit(PEcAn.DB::db.close(con), add = TRUE)
   
   #grab site lat and lon info
-  latlon <- PEcAn.data.atmosphere::db.site.lat.lon(site$id, con = con)
+  latlon <- PEcAn.DB::query.site(site$id, con = con)[c("lat", "lon")] 
   # setup site database number, lat, lon and name and copy for format.vars if new input
   new.site <- data.frame(id = as.numeric(site$id),
                          lat = latlon$lat,

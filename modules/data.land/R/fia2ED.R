@@ -7,13 +7,19 @@
 # http://opensource.ncsa.illinois.edu/license.html
 #-------------------------------------------------------------------------------
 
-##' convert x into a table
-##'
-##' @title fia.to.psscss
-##' @param create pss/css files based on data in the fia database
-##' @return nothing
-##' @export
-##' @author Mike Dietze, Rob Kooper, Ryan Kelly
+#' Create pss/css files based on data in the fia database
+#'
+#' @param settings PEcAn settings object
+#' @param lat,lon site location in decimal degrees.
+#'  Defults to values passed in `settings`.
+#' @param year defaults to year of start date passed in settings
+#' @param gridres grid resolution in degrees
+#' @param min.year,max.year limits on years of FIA data to look for
+#' @param overwrite logical: regenerate files already in the database?
+#'
+#' @return modified settings, invisibly
+#' @export
+#' @author Mike Dietze, Rob Kooper, Ryan Kelly
 fia.to.psscss <- function(settings, 
                           lat = as.numeric(settings$run$site$lat),
                           lon = as.numeric(settings$run$site$lon),
@@ -82,7 +88,7 @@ fia.to.psscss <- function(settings,
   pfts <- PEcAn.DB::db.query(query, con = con)
   
   # Convert PFT names to ED2 Numbers
-  data(pftmapping)
+  utils::data(pftmapping)
   for (pft.i in settings$pfts) {
     pft.number <- NULL
     pft.number <- pft.i$constants$num
@@ -110,7 +116,7 @@ fia.to.psscss <- function(settings,
     names(symbol.table) <- tolower(names(symbol.table))
     
     # grab the names where we have bad spcds in the symbol.table, exclude NAs
-    name.list <- na.omit(symbol.table$symbol[symbol.table$spcd %in% bad])
+    name.list <- stats::na.omit(symbol.table$symbol[symbol.table$spcd %in% bad])
     
     PEcAn.logger::logger.severe(paste0("The following species are found in multiple PFTs: ", 
                          paste(name.list[1:min(10, length(name.list))], collapse = ", "), 
@@ -232,7 +238,7 @@ fia.to.psscss <- function(settings,
       symbol.table <- PEcAn.DB::db.query("SELECT spcd, \"Symbol\" FROM species where spcd IS NOT NULL", con = con)
       names(symbol.table) <- tolower(names(symbol.table))
     }
-    name.list <- na.omit(symbol.table$symbol[symbol.table$spcd %in% pft.only])
+    name.list <- stats::na.omit(symbol.table$symbol[symbol.table$spcd %in% pft.only])
     PEcAn.logger::logger.warn(paste0("The selected PFTs contain the following species for which the FIA database ",
                        "contains no data at ", lat, " and ", lon, ": ", 
                        paste(name.list[1:min(10, length(name.list))], collapse = ", "), "."))
@@ -247,7 +253,7 @@ fia.to.psscss <- function(settings,
       symbol.table <- PEcAn.DB::db.query("SELECT spcd, \"Symbol\" FROM species where spcd IS NOT NULL", con = con)
       names(symbol.table) <- tolower(names(symbol.table))
     }
-    name.list <- na.omit(symbol.table$symbol[symbol.table$spcd %in% fia.only])
+    name.list <- stats::na.omit(symbol.table$symbol[symbol.table$spcd %in% fia.only])
     name.list <- name.list[name.list != "DEAD"]
     if (length(name.list) > 0) {
       PEcAn.logger::logger.warn(paste0("The FIA database expects the following species at ", lat, " and ", lon, 
@@ -273,7 +279,7 @@ fia.to.psscss <- function(settings,
   css$time[is.na(css$time)]     <- 1
   css$cohort[is.na(css$cohort)] <- 1:sum(is.na(css$cohort))
   css$dbh[is.na(css$dbh)]       <- 1  # assign nominal small dbh to missing
-  density.median                <- median(css$n[which(css$n > 0)])
+  density.median                <- stats::median(css$n[which(css$n > 0)])
   css$n[is.na(css$n) | css$n == 0]    <- density.median
   css$hite <- css$bdead <- css$balive <- css$lai <- rep(0, n.cohort)
   
@@ -319,8 +325,8 @@ fia.to.psscss <- function(settings,
   site.file.local <- file.path(out.dir.local, paste0(prefix.site, ".site"))
   
   dir.create(out.dir.local, showWarnings = F, recursive = T)
-  write.table(pss, pss.file.local, quote = FALSE, row.names = FALSE)
-  write.table(css, css.file.local, quote = FALSE, row.names = FALSE)
+  utils::write.table(pss, pss.file.local, quote = FALSE, row.names = FALSE)
+  utils::write.table(css, css.file.local, quote = FALSE, row.names = FALSE)
   
   site.file.con <- file(site.file.local)
   writeLines(site, site.file.con)
@@ -344,7 +350,7 @@ fia.to.psscss <- function(settings,
   
   # Insert into DB
   for(i in seq_along(files)) {
-    dbfile.input.insert(
+    PEcAn.DB::dbfile.input.insert(
       in.path    = dirname(files[i]),
       in.prefix  = basename(files[i]),
       siteid     = settings$run$site$id,

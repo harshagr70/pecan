@@ -1,15 +1,12 @@
 Package: PEcAn.LPJGUESS
 Type: Package
 Title: PEcAn Package for Integration of the LPJ-GUESS Model
-Version: 1.7.2
-Date: 2021-10-04
+Version: 1.7.3.9000
 Authors@R: c(person("Istem", "Fer", role = c("aut", "cre"),
                      email = "istem.fer@fmi.fi"),
              person("Tony", "Gardella", role = c("aut"),
                      email = "tonygard@bu.edu"),
              person("University of Illinois, NCSA", role = c("cph")))
-Author: Istem Fer, Tony Gardella
-Maintainer: Istem Fer <fer.istem@gmail.com>
 Description: This module provides functions to link LPJ-GUESS to PEcAn.
 Imports:
     PEcAn.logger,
@@ -28,4 +25,4 @@ Copyright: Authors
 LazyLoad: yes
 LazyData: FALSE
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2

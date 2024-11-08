@@ -1,5 +1,9 @@
-# PEcAn.remote 1.7.2.9000
+# PEcAn.remote 1.8.0.9000
 
+* PEcAn.remote is now distributed under the BSD 3-clause license instead of the NCSA Open Source license.
+
+
+# PEcAn.remote 1.8.0
 
 ## Added
 

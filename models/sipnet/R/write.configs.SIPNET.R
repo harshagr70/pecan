@@ -1,16 +1,14 @@
-#-------------------------------------------------------------------------------
-# Copyright (c) 2012 University of Illinois, NCSA.
-# All rights reserved. This program and the accompanying materials
-# are made available under the terms of the
-# University of Illinois/NCSA Open Source License
-# which accompanies this distribution, and is available at
-# http://opensource.ncsa.illinois.edu/license.html
-#-------------------------------------------------------------------------------
-
-#--------------------------------------------------------------------------------------------------#
 ##' Writes a configuration files for your model
 ##' @name write.config.SIPNET
 ##' @title Writes a configuration files for SIPNET model
+##' @param defaults pft
+##' @param trait.values vector of samples for a given trait
+##' @param settings PEcAn settings object
+##' @param run.id run ID
+##' @param inputs list of model inputs
+##' @param IC initial condition
+##' @param restart In case this is a continuation of an old simulation. restart needs to be a list with name tags of runid, inputs, new.params (parameters), new.state (initial condition), ensemble.id (ensemble id), start.time and stop.time.See Details.
+##' @param spinup currently unused, included for compatibility with other models
 ##' @export
 ##' @author Michael Dietze
 write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs = NULL, IC = NULL,
@@ -61,7 +59,6 @@ write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs
     cdosetup <- paste(cdosetup, sep = "\n", paste(settings$host$cdosetup, collapse = "\n"))
   }
   
-  
   hostteardown <- ""
   if (!is.null(settings$model$postrun)) {
     hostteardown <- paste(hostteardown, sep = "\n", paste(settings$model$postrun, collapse = "\n"))
@@ -69,6 +66,23 @@ write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs
   if (!is.null(settings$host$postrun)) {
     hostteardown <- paste(hostteardown, sep = "\n", paste(settings$host$postrun, collapse = "\n"))
   }
+  
+  # create rabbitmq specific setup.
+  cpruncmd <- cpoutcmd <- rmoutdircmd <- rmrundircmd <- ""
+  if (!is.null(settings$host$rabbitmq)) {
+    #rsync cmd from remote to local host.
+    settings$host$rabbitmq$cpfcmd <- ifelse(is.null(settings$host$rabbitmq$cpfcmd), "", settings$host$rabbitmq$cpfcmd)
+    cpruncmd <- gsub("@OUTDIR@", settings$host$rundir, settings$host$rabbitmq$cpfcmd)
+    cpruncmd <- gsub("@OUTFOLDER@", rundir, cpruncmd)
+    
+    cpoutcmd <- gsub("@OUTDIR@", settings$host$outdir, settings$host$rabbitmq$cpfcmd)
+    cpoutcmd <- gsub("@OUTFOLDER@", outdir, cpoutcmd)
+    
+    #delete files within rundir and outdir.
+    rmoutdircmd <- paste("rm", file.path(outdir, "*"))
+    rmrundircmd <- paste("rm", file.path(rundir, "*"))
+  }
+  
   # create job.sh
   jobsh <- gsub("@HOST_SETUP@", hostsetup, jobsh)
   jobsh <- gsub("@CDO_SETUP@", cdosetup, jobsh)
@@ -86,6 +100,11 @@ write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs
   
   jobsh <- gsub("@BINARY@", settings$model$binary, jobsh)
   jobsh <- gsub("@REVISION@", settings$model$revision, jobsh)
+  
+  jobsh <- gsub("@CPRUNCMD@", cpruncmd, jobsh)
+  jobsh <- gsub("@CPOUTCMD@", cpoutcmd, jobsh)
+  jobsh <- gsub("@RMOUTDIRCMD@", rmoutdircmd, jobsh)
+  jobsh <- gsub("@RMRUNDIRCMD@", rmrundircmd, jobsh)
   
   if(is.null(settings$state.data.assimilation$NC.Prefix)){
     settings$state.data.assimilation$NC.Prefix <- "sipnet.out"
@@ -417,7 +436,31 @@ write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs
     if ("leafGrowth" %in% pft.names) {
       param[which(param[, 1] == "leafGrowth"), 2] <- pft.traits[which(pft.names == "leafGrowth")]
     }
-  }  ## end loop over PFTS
+
+    #update LeafOnday and LeafOffDay
+     if (!is.null(settings$run$inputs$leaf_phenology)){
+     obs_year_start <- lubridate::year(settings$run$start.date)
+     obs_year_end <- lubridate::year(settings$run$end.date)
+     if (obs_year_start != obs_year_end) {
+      PEcAn.logger::logger.info("Start.date and end.date are not in the same year. Currently start.date is used for refering phenological data")
+     }
+     leaf_pheno_path <- settings$run$inputs$leaf_phenology$path  ## read from settings
+      if (!is.null(leaf_pheno_path)){
+    ##read data
+       leafphdata <- utils::read.csv(leaf_pheno_path)
+       leafOnDay <-  leafphdata$leafonday[leafphdata$year == obs_year_start & leafphdata$site_id==settings$run$site$id]
+       leafOffDay<-  leafphdata$leafoffday[leafphdata$year== obs_year_start & leafphdata$site_id==settings$run$site$id]
+       if (!is.na(leafOnDay)){
+	      param[which(param[, 1] == "leafOnDay"), 2] <- leafOnDay
+       }
+       if (!is.na(leafOffDay)){
+        param[which(param[, 1] == "leafOffDay"), 2] <- leafOffDay
+       }
+      } else {
+      PEcAn.logger::logger.info("No phenology data were found. Please consider running `PEcAn.data.remote::extract_phenology_MODIS` to get the parameter file.")
+      }
+    }
+  } ## end loop over PFTS
   ####### end parameter update
   #working on reading soil file (only working for 1 soil file)
   if(length(settings$run$inputs$soilinitcond$path)==1){
@@ -441,7 +484,12 @@ write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs
     plant_wood_vars <- c("AbvGrndWood", "abvGrndWoodFrac", "coarseRootFrac", "fineRootFrac")
     if (all(plant_wood_vars %in% ic.names)) {
       # reconstruct total wood C
-      wood_total_C <- IC$AbvGrndWood / IC$abvGrndWoodFrac
+      if(IC$abvGrndWoodFrac < 0.05){
+        wood_total_C <- IC$AbvGrndWood
+      }else{
+        wood_total_C <- IC$AbvGrndWood / IC$abvGrndWoodFrac
+      }
+
       #Sanity check
       if (is.infinite(wood_total_C) | is.nan(wood_total_C) | wood_total_C < 0) {
         wood_total_C <- 0
@@ -510,6 +558,15 @@ write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs
       if (!is.na(lai) && is.numeric(lai)) {
         param[which(param[, 1] == "laiInit"), 2] <- lai
       }
+
+      #Initial LAI is set as 0 for deciduous forests and grasslands for non-growing seasons
+      if (!(lubridate::month(settings$run$start.date) %in% seq(5,9))){ #Growing seasons are coarsely defined as months from May to September for non-conifers in the US
+         site_pft <- utils::read.csv(settings$run$inputs$pft.site$path)
+         site.pft.name <- site_pft$pft[site_pft$site == settings$run$site$id]
+         if (site.pft.name!="boreal.coniferous") {   #Currently only excluding boreal conifers. Other evergreen PFTs could be added here later.
+              param[which(param[, 1] == "laiInit"), 2] <- 0       
+          }
+      }
       ## neeInit gC/m2
       nee <- try(ncdf4::ncvar_get(IC.nc,"nee"),silent = TRUE)
       if (!is.na(nee) && is.numeric(nee)) {
@@ -525,8 +582,10 @@ write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs
       }
       ## soilWFracInit fraction
       soilWFrac <- try(ncdf4::ncvar_get(IC.nc,"SoilMoistFrac"),silent = TRUE)
-      if (!is.na(soilWFrac) && is.numeric(soilWFrac)) {
-        param[which(param[, 1] == "soilWFracInit"), 2] <- sum(soilWFrac)
+      if (!"try-error" %in% class(soilWFrac)) {
+        if (!is.na(soilWFrac) && is.numeric(soilWFrac)) {
+          param[which(param[, 1] == "soilWFracInit"), 2] <- sum(soilWFrac)/100
+        }
       }
       ## litterWFracInit fraction
       litterWFrac <- soilWFrac

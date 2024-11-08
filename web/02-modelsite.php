@@ -54,9 +54,9 @@ if (!$stmt->execute(array(get_userid()))) {
 $sitegroups = "";
 while ($row = @$stmt->fetch(PDO::FETCH_ASSOC)) {
   if ($sitegroupid == $row['id']) {
-    $sitegroups .= "<option value='${row['id']}' selected>${row['name']}</option>\n";
+    $sitegroups .= "<option value='{$row['id']}' selected>{$row['name']}</option>\n";
   } else {
-    $sitegroups .= "<option value='${row['id']}'>${row['name']}</option>\n";    
+    $sitegroups .= "<option value='{$row['id']}'>{$row['name']}</option>\n";    
   }
 }
 if ($sitegroupid == "-1") {
@@ -387,7 +387,7 @@ function renderSites(selected) {
       </select>
       <div class="spacer"></div>
 
-      <a href="https://pecanproject.github.io/pecan-documentation/master/pecan-models.html" target="_blank" 
+      <a href="https://pecanproject.github.io/pecan-documentation/latest/pecan-models.html" target="_blank" 
       title="Link opens model descriptions in another window">
       <label id="modellabel">Model:</label></a>
       <select name="modelid" id="modelid" onChange="updateData();">

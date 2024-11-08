@@ -4,6 +4,8 @@
 #' @param input     PEcAn input list
 #' @param dbfiles   directory to write database files
 #' @param overwrite overwrite previous results (boolean)
+#' @param run.local logical: Run only on the current machine?
+#'  If FALSE, runs on `settings$host` (which might turn out to be the current machine)
 #'
 #' @return path to soil file
 #' @export
@@ -29,7 +31,7 @@ soil_process <- function(settings, input, dbfiles, overwrite = FALSE,run.local=T
   con <- PEcAn.DB::db.open(dbparms$bety)
   on.exit(PEcAn.DB::db.close(con), add = TRUE)
   # get site info
-  latlon <- PEcAn.data.atmosphere::db.site.lat.lon(site$id, con = con)
+  latlon <- PEcAn.DB::query.site(site$id, con = con)[c("lat", "lon")]
   new.site <- data.frame(id = as.numeric(site$id),
                          lat = latlon$lat,
                          lon = latlon$lon)
@@ -100,7 +102,7 @@ soil_process <- function(settings, input, dbfiles, overwrite = FALSE,run.local=T
 
   # retrieve model type info
   if(is.null(model)){
-    modeltype_id <- db.query(paste0("SELECT modeltype_id FROM models where id = '", settings$model$id, "'"), con)[[1]]
+    modeltype_id <- PEcAn.DB::db.query(paste0("SELECT modeltype_id FROM models where id = '", settings$model$id, "'"), con)[[1]]
     model <- db.query(paste0("SELECT name FROM modeltypes where id = '", modeltype_id, "'"), con)[[1]]
   }
 

@@ -30,6 +30,8 @@
 #' @return Character vector of file names containing raw, downloaded
 #'   data (invisibly)
 #' @author Alexey Shiklomanov
+#' @md 
+    # ^ tells Roxygen to interpret this fn's doc block as Markdown
 #' @export
 #' @examples
 #' \dontrun{
@@ -51,7 +53,7 @@ download.ERA5.old <- function(outfolder, start_date, end_date, lat.in, lon.in,
     "This function is an incomplete prototype! Use with caution!"
   )
 
-  need_packages("reticulate")
+  PEcAn.utils::need_packages("reticulate")
   
   if (!is.null(reticulate_python)) {
     reticulate::use_python(reticulate_python)

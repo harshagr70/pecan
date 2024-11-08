@@ -73,10 +73,17 @@ do_conversions <- function(settings, overwrite.met = FALSE, overwrite.fia = FALS
       ## which is done locally in rundir and then rsync'ed to remote
       ## rather than having a model-format soils file that is processed remotely
     }
+
+    # Phenology data extraction
+    if(input.tag == "leaf_phenology" && is.null(input$path)){
+      #settings$run$inputs[[i]]$path <- PEcAn.data.remote::extract_phenology_MODIS(site_info,start_date,end_date,outdir,run_parallel = TRUE,ncores = NULL)
+      needsave <- TRUE
+    }
+
     # met conversion
     
     if (input.tag == "met") {
-      name <- ifelse(is.null(settings$browndog), "MET Process", "BrownDog")
+      name <- "MET Process"
       if ( (PEcAn.utils::status.check(name) == 0)) { ## previously is.null(input$path) && 
         PEcAn.logger::logger.info("calling met.process: ",settings$run$inputs[[i]][['path']])
         settings$run$inputs[[i]] <- 
@@ -89,7 +96,6 @@ do_conversions <- function(settings, overwrite.met = FALSE, overwrite.fia = FALS
             host       = settings$host,
             dbparms    = settings$database$bety, 
             dir        = dbfiles,
-            browndog   = settings$browndog,
             spin       = settings$spin,
             overwrite  = overwrite.met)
         PEcAn.logger::logger.debug("updated met path: ",settings$run$inputs[[i]][['path']])
