@@ -15,16 +15,20 @@ get.parameter.samples <- function(settings,
   num.pfts  <- length(settings$pfts)
   pft.names <- list()
   outdirs   <- list()
+  if (settings$database$bety$write == FALSE) {
+    PEcAn.logger::logger.info("Skipping database access in get.parameter.samples because database settings are NULL.")
+    con <- NULL
+  } else {
   ## Open database connection
   con <- try(PEcAn.DB::db.open(settings$database$bety))
   on.exit(try(PEcAn.DB::db.close(con), silent = TRUE), add = TRUE)
-  
+
   # If we fail to connect to DB then we set to NULL
   if (inherits(con, "try-error"))  {
     con <- NULL
     PEcAn.logger::logger.warn("We were not able to successfully establish a connection with Bety ")
   }
-  
+  }
   for (i.pft in seq_along(pfts)) {
     pft.names[i.pft] <- settings$pfts[[i.pft]]$name
     
@@ -202,7 +206,7 @@ get.parameter.samples <- function(settings,
                                                env.samples, ens.sample.method, param.names)
     }
   }
-  
+  #ensemble.samples <- NULL
   save(ensemble.samples, trait.samples, sa.samples, runs.samples, env.samples, 
        file = file.path(settings$outdir, "samples.Rdata"))
 } # get.parameter.samples

@@ -222,6 +222,7 @@ write.ensemble.configs <- function(defaults, ensemble.samples, settings, model,
   }
   
   # See if we need to write to DB
+  if (!is.null(settings$database) && !is.null(settings$database$bety) && !is.null(settings$database$bety$write)) {
   write.to.db <- as.logical(settings$database$bety$write)
   
   if (write.to.db) {
@@ -235,6 +236,7 @@ write.ensemble.configs <- function(defaults, ensemble.samples, settings, model,
       con <- NULL
       PEcAn.logger::logger.warn("We were not able to successfully establish a connection with Bety ")
     }
+  }
   }
 
 
