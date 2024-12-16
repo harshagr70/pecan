@@ -206,7 +206,6 @@ get.parameter.samples <- function(settings,
                                                env.samples, ens.sample.method, param.names)
     }
   }
-  #ensemble.samples <- NULL
   save(ensemble.samples, trait.samples, sa.samples, runs.samples, env.samples, 
        file = file.path(settings$outdir, "samples.Rdata"))
 } # get.parameter.samples
