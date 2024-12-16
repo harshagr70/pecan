@@ -26,8 +26,8 @@ run.write.configs <- function(settings, write = TRUE, ens.sample.method = "unifo
                               posterior.files = rep(NA, length(settings$pfts)), 
                               overwrite = TRUE) {
   ## Skip database connection if settings$database is NULL
-  if (write == FALSE) {
-    PEcAn.logger::logger.info("Database connection skipped: No database settings provided.")
+  if (!isTRUE(write)) {
+    PEcAn.logger::logger.info("Not writing this run to database, so database connection skipped")
     con <- NULL  # Set con to NULL to avoid errors in subsequent code
   } else {
     tryCatch({
