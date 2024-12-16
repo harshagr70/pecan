@@ -13,6 +13,7 @@ runModule.run.write.configs <- function(settings, overwrite = TRUE) {
     }
     return(PEcAn.settings::papply(settings, runModule.run.write.configs, overwrite = FALSE))
   } else if (PEcAn.settings::is.Settings(settings)) {
+    write <- settings$database$bety$write
     # double check making sure we have method for parameter sampling
     if (is.null(settings$ensemble$samplingspace$parameters$method)) settings$ensemble$samplingspace$parameters$method <- "uniform"
     ens.sample.method <-  settings$ensemble$samplingspace$parameters$method
