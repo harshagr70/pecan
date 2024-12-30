@@ -52,7 +52,7 @@ jobs:
         path: book_source/_book/
     # download documentation repo
     - name: Checkout documentation repo
-      if: github.event_name == 'push'
+      if: github.event_name == 'push' && github.repository == 'pecanProject/pecan'
       uses: actions/checkout@v4
       with:
         repository: ${{ github.repository_owner }}/pecan-documentation
