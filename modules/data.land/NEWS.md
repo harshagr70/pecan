@@ -1,6 +1,7 @@
 # PEcAn.data.land 1.8.0.9000
 
 - Dependency `datapack` is now optional. It is only used by `dataone_download()` (#3373).
+- `soilgrids_soilC_extract()` no longer returns an empty dataframe when none of the queried locations are missing data.
 
 # PEcAn.data.land 1.8.0
 
