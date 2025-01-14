@@ -26,12 +26,14 @@ run.write.configs <- function(settings, write = TRUE, ens.sample.method = "unifo
                               posterior.files = rep(NA, length(settings$pfts)), 
                               overwrite = TRUE) {
   ## Skip database connection if settings$database is NULL or write is False
-  if (!isTRUE(write)) {
+  if (!isTRUE(write) && is.null(settings$database)) {
     PEcAn.logger::logger.info("Not writing this run to database, so database connection skipped")
     con <- NULL  # Set con to NULL to avoid errors in subsequent code
   } else if(is.null(settings$database)) {
-    PEcAn.logger::logger.info("There's no database connection, so database connection skipped")
-    con <- NULL  # Set con to NULL to avoid errors in subsequent code
+  PEcAn.logger::logger.error(
+    "Database is NULL but writing is enabled. Provide valid database settings in pecan.xml."
+  )
+  stop("Database connection required but settings$database is NULL.")
   } else{
     tryCatch({
       con <- PEcAn.DB::db.open(settings$database$bety)
