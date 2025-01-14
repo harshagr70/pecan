@@ -25,11 +25,14 @@
 run.write.configs <- function(settings, write = TRUE, ens.sample.method = "uniform", 
                               posterior.files = rep(NA, length(settings$pfts)), 
                               overwrite = TRUE) {
-  ## Skip database connection if settings$database is NULL
+  ## Skip database connection if settings$database is NULL or write is False
   if (!isTRUE(write)) {
     PEcAn.logger::logger.info("Not writing this run to database, so database connection skipped")
     con <- NULL  # Set con to NULL to avoid errors in subsequent code
-  } else {
+  } else if(is.null(settings$database)) {
+    PEcAn.logger::logger.info("There's no database connection, so database connection skipped")
+    con <- NULL  # Set con to NULL to avoid errors in subsequent code
+  } else{
     tryCatch({
       con <- PEcAn.DB::db.open(settings$database$bety)
       on.exit(PEcAn.DB::db.close(con), add = TRUE)
