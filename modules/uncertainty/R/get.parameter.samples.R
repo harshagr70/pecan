@@ -15,10 +15,7 @@ get.parameter.samples <- function(settings,
   num.pfts  <- length(settings$pfts)
   pft.names <- list()
   outdirs   <- list()
-  if (settings$database$bety$write == FALSE) {
-    PEcAn.logger::logger.info("Skipping database access in get.parameter.samples because database settings are NULL.")
-    con <- NULL
-  } else {
+
   ## Open database connection
   con <- try(PEcAn.DB::db.open(settings$database$bety))
   on.exit(try(PEcAn.DB::db.close(con), silent = TRUE), add = TRUE)
@@ -28,7 +25,7 @@ get.parameter.samples <- function(settings,
     con <- NULL
     PEcAn.logger::logger.warn("We were not able to successfully establish a connection with Bety ")
   }
-  }
+  
   for (i.pft in seq_along(pfts)) {
     pft.names[i.pft] <- settings$pfts[[i.pft]]$name
     
@@ -104,6 +101,7 @@ get.parameter.samples <- function(settings,
       load(file.path(outdirs[i], "trait.mcmc.Rdata"), envir = distns)
     } else {
       ma.results <- FALSE
+      PEcAn.logger::logger.info("ma.results is FALSE")
     }
     
     pft.name <- unlist(pft.names[i])
