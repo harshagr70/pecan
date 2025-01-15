@@ -175,7 +175,7 @@ start_model_runs <- function(settings, write = TRUE, stop.on.error = TRUE) {
       if (write){
         # write finished time to database
         PEcAn.DB::stamp_finished(con = dbcon, run = run)
-        }
+      }
       pbi <- pbi + 1
       utils::setTxtProgressBar(pb, pbi)
     }
