@@ -239,7 +239,6 @@ write.ensemble.configs <- function(defaults, ensemble.samples, settings, model,
       PEcAn.logger::logger.warn("We were not able to successfully establish a connection with BETYdb ")
     }
   }
-  }
 
 
   
