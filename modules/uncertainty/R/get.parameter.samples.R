@@ -101,7 +101,6 @@ get.parameter.samples <- function(settings,
       load(file.path(outdirs[i], "trait.mcmc.Rdata"), envir = distns)
     } else {
       ma.results <- FALSE
-      PEcAn.logger::logger.info("ma.results is FALSE")
     }
     
     pft.name <- unlist(pft.names[i])
