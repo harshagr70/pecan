@@ -223,7 +223,9 @@ write.ensemble.configs <- function(defaults, ensemble.samples, settings, model,
   
   # See if we need to write to DB
   if (!is.null(settings$database$bety$write)) {
-  write.to.db <- as.logical(settings$database$bety$write)
+    # specifying `write` in settings overrides write.to.db in fn args
+    write.to.db <- as.logical(settings$database$bety$write)
+  }
   
   if (write.to.db) {
     # Open connection to database so we can store all run/ensemble information
