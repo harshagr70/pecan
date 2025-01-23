@@ -560,12 +560,17 @@ write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs
       }
 
       #Initial LAI is set as 0 for deciduous forests and grasslands for non-growing seasons
-      if (!(lubridate::month(settings$run$start.date) %in% seq(5,9))){ #Growing seasons are coarsely defined as months from May to September for non-conifers in the US
-         site_pft <- utils::read.csv(settings$run$inputs$pft.site$path)
-         site.pft.name <- site_pft$pft[site_pft$site == settings$run$site$id]
-         if (site.pft.name!="boreal.coniferous") {   #Currently only excluding boreal conifers. Other evergreen PFTs could be added here later.
-              param[which(param[, 1] == "laiInit"), 2] <- 0       
-          }
+      #Growing seasons are coarsely defined as months from May to September for non-conifers in the US
+      if (!(lubridate::month(settings$run$start.date) %in% seq(5, 9))) {
+        site.pft.name <- settings$run$site$site.pft
+        if (is.null(site.pft.name)) {
+          site_pft <- utils::read.csv(settings$run$inputs$pft.site$path)
+          site.pft.name <- site_pft$pft[site_pft$site == settings$run$site$id]
+        }
+        if (site.pft.name != "boreal.coniferous") {
+          #Currently only excluding boreal conifers. Other evergreen PFTs could be added here later.
+          param[which(param[, 1] == "laiInit"), 2] <- 0
+        }
       }
       ## neeInit gC/m2
       nee <- try(ncdf4::ncvar_get(IC.nc,"nee"),silent = TRUE)
