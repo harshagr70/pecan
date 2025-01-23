@@ -562,10 +562,14 @@ write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs
       #Initial LAI is set as 0 for deciduous forests and grasslands for non-growing seasons
       #Growing seasons are coarsely defined as months from May to September for non-conifers in the US
       if (!(lubridate::month(settings$run$start.date) %in% seq(5, 9))) {
-        site.pft.name <- settings$run$site$site.pft
-        if (is.null(site.pft.name)) {
+        if (!is.null(settings$run$inputs$pft.site)) {
+          # A CSV file specifying PFT names for each site (mostly intended for
+          #  multisite runs, but if it exists we use it even for a single site)
           site_pft <- utils::read.csv(settings$run$inputs$pft.site$path)
           site.pft.name <- site_pft$pft[site_pft$site == settings$run$site$id]
+        } else {
+          # A PFT name specified directly in the settings
+          site.pft.name <- settings$run$site$site.pft
         }
         if (site.pft.name != "boreal.coniferous") {
           #Currently only excluding boreal conifers. Other evergreen PFTs could be added here later.
