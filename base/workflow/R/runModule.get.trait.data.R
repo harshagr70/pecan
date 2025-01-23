@@ -39,7 +39,7 @@ runModule.get.trait.data <- function(settings) {
     forceupdate = ifelse(is.null(settings$meta.analysis$update),
                          FALSE,
                          settings$meta.analysis$update),
-    write = settings$database$bety$write
+    write = isTRUE(settings$database$bety$write)
   )
 
   return(settings)

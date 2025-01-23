@@ -29,7 +29,7 @@ runModule.run.write.configs <- function(settings, overwrite = TRUE) {
 
     return(PEcAn.workflow::run.write.configs(
       settings = settings,
-      write = settings$database$bety$write,
+      write = isTRUE(settings$database$bety$write), # treat null as FALSE
       ens.sample.method = settings$ensemble$samplingspace$parameters$method,
       posterior.files = posterior.files,
       overwrite = overwrite
