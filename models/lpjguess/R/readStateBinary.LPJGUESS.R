@@ -208,9 +208,9 @@ readStateBinary <- function(out.path, npft){
   nofpatch <- readBin(zz, integer(), 1, size = 4)  
   
   for(pat in 1:nofpatch){
-    Patchpft_list[[pat]] <- getClass_Patchpft(zz,npft)
+    Patchpft_list[[pat]] <- getClass_Patchpft(zz, npft)
     Vegetation_list[[pat]] <- getClass_Vegetation(zz)
-    Individual_list[[pat]] <- getClass_Individual(Vegetation_list[[pat]]$indv,zz)
+    Individual_list[[pat]] <- getClass_Individual(Vegetation_list[[pat]]$indv, zz)
     Soil_list[[pat]] <- getClass_Soil(zz)
     Sompool_list[[pat]] <- getClass_Sompool(zz)
     SompoolCent_list[[pat]] <- getClass_SompoolCent(zz) 
