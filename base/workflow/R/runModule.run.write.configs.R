@@ -3,6 +3,7 @@
 #' @param settings a PEcAn Settings or MultiSettings object
 #' @param overwrite logical: Replace config files if they already exist?
 #' @return A modified settings object, invisibly
+#' @importFrom dplyr %>%
 #' @export
 runModule.run.write.configs <- function(settings, overwrite = TRUE) {
 
@@ -20,12 +21,8 @@ runModule.run.write.configs <- function(settings, overwrite = TRUE) {
 
 
     #check to see if there are posterior.files tags under pft
-    posterior.files <- settings$pfts %>%
-      purrr::map(purrr::possibly("posterior.files", NA_character_)) %>%
-      purrr::modify_depth(1, function(x) {
-        ifelse(is.null(x), NA_character_, x)
-      }) %>%
-      unlist()
+    posterior.files <-   settings$pfts %>%
+      purrr::map_chr("posterior.files", .default = NA_character_)
 
     return(PEcAn.workflow::run.write.configs(
       settings = settings,
