@@ -570,9 +570,6 @@ write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs
       # Sipnet always starts from initial LAI whether day 0 is in or out of the
       # growing season -> set LAI=0 when a deciduous PFT starts with leaves off
       #
-      # Note: leaf fall threshold of 0.5 is arbitrary -- most deciduous PFTs
-      # will be close to 1, evergreens usually < 0.2
-      #
       # Note: At this writing in Jan 2025, leafOnDay and LeafOffDay are taken
       # from the model defaults (template.param) unless:
       # - settings$run$inputs$leaf_phenology is provided, or
