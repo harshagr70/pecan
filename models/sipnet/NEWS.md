@@ -5,7 +5,9 @@
 
 ## Fixed
 
-* `write.config.SIPNET()` now respects PFTs defined in `settings$run$site$site.pft` when setting PFT-specific initial LAI (it previously only looked in a CSV file declared at `settings$run$inputs$pft.site$path`)
+* `write.config.SIPNET()` now consults PFT trait definitions to decide whether to initialize LAI in the leaf-on or leaf-off state, instead of the previous hard-coded defaults. Specifically:
+	- a PFT with `fracLeafFall` > 0.5 will be treated as deciduous (previously hardcoded to deciduous for anything other than boreal conifers)
+	- deciduous PFTs will get laiInit=0 if the simulation start date is not between `leafOnDay` and `leafOffDay` (previously hardcoded to May through September)
 * The generated Sipnet run script (job.sh) now works correctly, including across machines, when met/input/output files are specified relative to the working directory (#3418). Absolute paths continue to work as always.
 
 # PEcAn.SIPNET 1.8.0
