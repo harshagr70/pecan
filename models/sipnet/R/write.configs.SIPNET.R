@@ -158,7 +158,7 @@ write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs
   trait_names_all_pfts <- as.vector(sapply(trait.values, names))
   dup_traitnames <- trait_names_all_pfts[duplicated(trait_names_all_pfts)]
   if (length(dup_traitnames) > 0) {
-    PEcAn.logger::logger.warning(
+    PEcAn.logger::logger.warn(
       "Multiple trait values given for parameters",
       paste(dQuote(dup_traitnames), collapse = ", "),
       "write.config.SIPNET will use the value it sees last."
