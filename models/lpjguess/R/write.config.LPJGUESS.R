@@ -12,6 +12,9 @@
 ##' @return configuration file for LPJ-GUESS for given run
 ##' @export
 ##' @author Istem Fer, Tony Gardella
+
+co2_data <- new.env()
+
 write.config.LPJGUESS <- function(defaults, trait.values, settings, run.id) {
   
   # find out where to write run/ouput
@@ -183,7 +186,8 @@ write.insfile.LPJGUESS <- function(settings, trait.values, rundir, outdir, run.i
   if (end.year < 1850) {
     CO2 <- data.frame(start.year:end.year, rep(280, n.year))
   } else if (end.year < 2021) {
-    utils::data(co2.1850.2020, package = "PEcAn.LPJGUESS")
+    utils::data(co2.1850.2020, package = "PEcAn.LPJGUESS", envir = co2_data)
+    co2.1850.2020 <- co2_data$co2.1850.2020
     if (start.year < 1850) {
       CO2_preind <- data.frame(year = start.year:1849, ppm = rep(280, length(start.year:1849)))
       CO2_postind <- co2.1850.2020[1:which(co2.1850.2020[, 1] == end.year), ]
