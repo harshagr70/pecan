@@ -74,7 +74,7 @@ run.write.configs <- function(settings, write = TRUE, ens.sample.method = "unifo
             pfiles = pfiles[grep("post.distns.Rdata",pfiles)]
           } else {
             PEcAn.logger::logger.error(
-              "run.write.configs: could uniquely identify posterior files within",
+              "run.write.configs: could not uniquely identify posterior files within",
               posterior.files[i])
           }
           posterior.files[i] = pfiles
