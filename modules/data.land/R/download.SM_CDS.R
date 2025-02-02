@@ -88,7 +88,7 @@ download.SM_CDS <- function(outfolder, time.points, overwrite = FALSE, auto.crea
     if (file.exists(fname) && !overwrite) {
       PEcAn.logger::logger.warn(glue::glue(
         "File `{fname}` already exists, and `overwrite` is FALSE. ",
-        "Skipping to next variable."
+        "Skipping to next date."
       ))
       next
     }
@@ -105,13 +105,11 @@ download.SM_CDS <- function(outfolder, time.points, overwrite = FALSE, auto.crea
         'type_of_record'= 'cdr',
         'version'= 'v202212'
       ),
-      'download.zip'
+      fname.zip
     )))) {
       Sys.sleep(10)
       PEcAn.logger::logger.info("Encounter error! Will try download in 10 seconds.")
     }
-    #download file to local.
-    utils::download.file(do_next$reply$location, destfile = fname.zip)
     #unzip file.
     unzipPath <- utils::unzip(zipfile = fname.zip, exdir = outfolder)
     #rename unziped file.
