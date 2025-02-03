@@ -143,7 +143,27 @@ write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs
   
   param <- utils::read.table(template.param)
   
-  #### write run-specific PFT parameters here #### Get parameters being handled by PEcAn
+  #### write run-specific PFT parameters here
+  #
+  # Q: "Wait, Sipnet only uses one PFT at a time. What's this loop doing?"
+  #
+  # A: Sipnet only uses one *vegetation* PFT at a time, but this hack lets us
+  #    also pass a "soil PFT" of values for a suite of biogeochemical traits.
+  #   We do check that each trait appears in only one PFT (so that the loop
+  #    sets each parameter no more than one time), but it is up to the user to
+  #    confirm whether the resulting joint parameter set makes any sense.
+  # TODO: consider flattening trait.values to eliminate the loop entirely?
+  #   Might be as simple as (untested!)
+  #   trait.values <- Reduce(trait.values, f=append)
+  trait_names_all_pfts <- as.vector(sapply(trait.values, names))
+  dup_traitnames <- trait_names_all_pfts[duplicated(trait_names_all_pfts)]
+  if (length(dup_traitnames) > 0) {
+    PEcAn.logger::logger.warn(
+      "Multiple trait values given for parameters",
+      paste(dQuote(dup_traitnames), collapse = ", "),
+      "write.config.SIPNET will use the value it sees last."
+    )
+  }
   for (pft in seq_along(trait.values)) {
     pft.traits <- unlist(trait.values[[pft]])
     pft.names <- names(pft.traits)
@@ -438,26 +458,34 @@ write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs
     }
 
     #update LeafOnday and LeafOffDay
-     if (!is.null(settings$run$inputs$leaf_phenology)){
-     obs_year_start <- lubridate::year(settings$run$start.date)
-     obs_year_end <- lubridate::year(settings$run$end.date)
-     if (obs_year_start != obs_year_end) {
-      PEcAn.logger::logger.info("Start.date and end.date are not in the same year. Currently start.date is used for refering phenological data")
-     }
-     leaf_pheno_path <- settings$run$inputs$leaf_phenology$path  ## read from settings
-      if (!is.null(leaf_pheno_path)){
-    ##read data
-       leafphdata <- utils::read.csv(leaf_pheno_path)
-       leafOnDay <-  leafphdata$leafonday[leafphdata$year == obs_year_start & leafphdata$site_id==settings$run$site$id]
-       leafOffDay<-  leafphdata$leafoffday[leafphdata$year== obs_year_start & leafphdata$site_id==settings$run$site$id]
-       if (!is.na(leafOnDay)){
-	      param[which(param[, 1] == "leafOnDay"), 2] <- leafOnDay
-       }
-       if (!is.na(leafOffDay)){
-        param[which(param[, 1] == "leafOffDay"), 2] <- leafOffDay
-       }
+    if (!is.null(settings$run$inputs$leaf_phenology)) {
+      obs_year_start <- lubridate::year(settings$run$start.date)
+      obs_year_end <- lubridate::year(settings$run$end.date)
+      if (obs_year_start != obs_year_end) {
+        PEcAn.logger::logger.info(
+          "Start.date and end.date are not in the same year.",
+          "Using phenological data from start year only."
+        )
+      }
+      leaf_pheno_path <- settings$run$inputs$leaf_phenology$path
+      if (!is.null(leaf_pheno_path)) {
+        ##read data
+        leafphdata <- utils::read.csv(leaf_pheno_path)
+        leafOnDay <- leafphdata$leafonday[leafphdata$year == obs_year_start
+                                          & leafphdata$site_id == settings$run$site$id]
+        leafOffDay <- leafphdata$leafoffday[leafphdata$year == obs_year_start
+                                            & leafphdata$site_id == settings$run$site$id]
+        if (!is.na(leafOnDay)) {
+          param[which(param[, 1] == "leafOnDay"), 2] <- leafOnDay
+        }
+        if (!is.na(leafOffDay)) {
+          param[which(param[, 1] == "leafOffDay"), 2] <- leafOffDay
+        }
       } else {
-      PEcAn.logger::logger.info("No phenology data were found. Please consider running `PEcAn.data.remote::extract_phenology_MODIS` to get the parameter file.")
+        PEcAn.logger::logger.info("No phenology data were found.",
+          "Please consider running `PEcAn.data.remote::extract_phenology_MODIS`",
+          "to get the parameter file."
+        )
       }
     }
   } ## end loop over PFTS
@@ -559,14 +587,29 @@ write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs
         param[which(param[, 1] == "laiInit"), 2] <- lai
       }
 
-      #Initial LAI is set as 0 for deciduous forests and grasslands for non-growing seasons
-      if (!(lubridate::month(settings$run$start.date) %in% seq(5,9))){ #Growing seasons are coarsely defined as months from May to September for non-conifers in the US
-         site_pft <- utils::read.csv(settings$run$inputs$pft.site$path)
-         site.pft.name <- site_pft$pft[site_pft$site == settings$run$site$id]
-         if (site.pft.name!="boreal.coniferous") {   #Currently only excluding boreal conifers. Other evergreen PFTs could be added here later.
-              param[which(param[, 1] == "laiInit"), 2] <- 0       
-          }
+      # Sipnet always starts from initial LAI whether day 0 is in or out of the
+      # growing season -> set LAI=0 when a deciduous PFT starts with leaves off
+      #
+      # Note: At this writing in Jan 2025, leafOnDay and LeafOffDay are taken
+      # from the model defaults (template.param) unless:
+      # - settings$run$inputs$leaf_phenology is provided, or
+      # - the PFT sets leafOnDay/leafOffday as traits.
+      # So unless you set something different, it's probably using DOY 144/285
+      # ==> leaves are on from late May through mid-October.
+      is_deciduous_pft <- isTRUE(param[param[, 1] == "fracLeafFall", 2] > 0.5)
+      start_day <- lubridate::yday(settings$run$start.date)
+      starts_with_leaves <- (
+        start_day >= param[param[, 1] == "leafOnDay", 2]
+        && start_day <= param[param[, 1] == "leafOffDay", 2]
+      )
+      if (is_deciduous_pft && !starts_with_leaves) {
+        # Note that this doesn't adjust for winter LAI of evergreens!
+        # Could consider using LAI*fracLeafFall,
+        # But that strongly assumes that IC LAI is both (1) reported at
+        # season peak and not (2) adjusted by any earlier step (i.e. SDA).
+        param[param[, 1] == "laiInit", 2] <- 0
       }
+
       ## neeInit gC/m2
       nee <- try(ncdf4::ncvar_get(IC.nc,"nee"),silent = TRUE)
       if (!is.na(nee) && is.numeric(nee)) {
@@ -635,6 +678,13 @@ write.config.SIPNET <- function(defaults, trait.values, settings, run.id, inputs
   utils::write.table(param, file.path(settings$rundir, run.id, "sipnet.param"), row.names = FALSE, col.names = FALSE,
               quote = FALSE)
 } # write.config.SIPNET
+
+
+
+
+
+
+
 #--------------------------------------------------------------------------------------------------#
 ##'
 ##' Clear out previous SIPNET config and parameter files.
