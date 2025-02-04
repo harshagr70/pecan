@@ -99,24 +99,6 @@ doc_R_pkg = \
 
 depends = .doc/$(1) .install/$(1) .check/$(1) .test/$(1)
 
-### Help
-
-help: ## Show this help message
-	@echo "Usage: make [target]"
-	@echo ""
-	@echo "Examples:"
-	@echo "  make all     "
-	@echo "  make document"
-	@echo ""
-	@echo "Notes:"
-	@echo "  - Components not included: cable (models), data.mining and DART (modules)."
-	@echo "  - Standard workflow: install packages, run checks, test, and document before submitting a PR."
-	@echo "  - Before submitting a PR, please ensure that all tests pass, code is linted, and documentation is up-to-date."
-	@echo ""
-	@echo "Available targets:"
-	@grep -h -E '^[a-zA-Z0-9_-]+:.*?## ' $(MAKEFILE_LIST) | \
-		awk 'BEGIN {FS = ":.*?## "}; {printf "  %-20s %s\n", $$1, $$2}'
-
 ### Rules
 
 .PHONY: all install check test document shiny \
@@ -138,12 +120,31 @@ test: $(ALL_PKGS_T) .test/base/all       ## Test all packages
 shiny: $(SHINY_I)                        ## Install Shiny app dependencies
 
 
-book: ## Render the PEcAn bookdown documentation
-	cd ./book_source && make build
+book: 
+	cd ./book_source && make build ## Render the PEcAn bookdown documentation
 
 # Make the timestamp directories if they don't exist yet
 .doc .install .check .test .shiny_depends $(call depends,base) $(call depends,models) $(call depends,modules):
 	mkdir -p $@
+
+### Help
+
+help: ## Show this help message
+	@echo "Usage: make [target]"
+	@echo ""
+	@echo "Examples:"
+	@echo "  make all     "
+	@echo "  make document"
+	@echo ""
+	@echo "Notes:"
+	@echo "  - Components not included: cable (models), data.mining and DART (modules)."
+	@echo "  - Standard workflow: install packages, run checks, test, and document before submitting a PR."
+	@echo "  - Before submitting a PR, please ensure that all tests pass, code is linted, and documentation is up-to-date."
+	@echo ""
+	@echo "Available targets:"
+	@grep -h -E '^[a-zA-Z0-9_-]+:.*?## ' $(MAKEFILE_LIST) | \
+		awk 'BEGIN {FS = ":.*?## "}; {printf "  %-20s %s\n", $$1, $$2}'
+
 
 ### Dependencies
 
