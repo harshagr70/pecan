@@ -457,6 +457,8 @@
 "raster","*","modules/data.atmosphere","Imports",FALSE
 "raster","*","modules/data.land","Suggests",FALSE
 "raster","*","modules/data.remote","Suggests",FALSE
+"Rcpp","*","models/lpjguess","LinkingTo",FALSE
+"Rcpp",">= 1.0.1","models/lpjguess","Imports",FALSE
 "rcrossref","*","base/db","Suggests",FALSE
 "readr","*","models/ldndc","Imports",FALSE
 "readr","*","modules/assim.sequential","Suggests",FALSE
