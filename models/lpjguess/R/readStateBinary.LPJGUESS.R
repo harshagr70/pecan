@@ -226,7 +226,7 @@ readStateBinary <- function(out.path, npft){
 
 
 ##################### Class : Patchpft #####################
-getClass_Patchpft <- function(zz,npft){
+getClass_Patchpft <- function(zz, npft){
   
   Patchpft <- list()
   
@@ -380,7 +380,7 @@ getClass_Vegetation <- function(zz){
 
 
 ##################### Class : Individual #####################
-getClass_Individual <- function(nind,zz){      #  nind <- Vegetation$indv 
+getClass_Individual <- function(nind, zz){      #  nind <- Vegetation$indv 
   
   Individual <- list()
   
