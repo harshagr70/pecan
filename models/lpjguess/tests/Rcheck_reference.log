@@ -46,11 +46,6 @@ Strong dependencies not in mainstream repositories:
 * checking replacement functions ... OK
 * checking foreign function calls ... OK
 * checking R code for possible problems ... OK
-
-Found the following calls to data() loading into the global environment:
-File ‘PEcAn.LPJGUESS/R/write.config.LPJGUESS.R’:
-  data(co2.1850.2020, package = "PEcAn.LPJGUESS")
-See section ‘Good practice’ in ‘?data’.
 * checking Rd files ... OK
 * checking Rd metadata ... OK
 * checking Rd line widths ... OK
