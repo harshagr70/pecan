@@ -10,6 +10,7 @@ For more information about this file see also [Keep a Changelog](http://keepacha
 ### Added
 
 - Documentation of `make` options including addition of `make help` 
+- Add make option to document a single package with `make documentation pathto/package` 
 
 ### Fixed
 - updated github action to build docker images
