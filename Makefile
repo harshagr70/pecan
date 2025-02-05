@@ -113,7 +113,17 @@ check_models: $(MODELS_C) ## Check model packages
 # and then run a check on modules
 check_modules: $(BASE_I) $(MODULES_C) ## Install base packages, check module packages
 
-document: $(ALL_PKGS_D) .doc/base/all ## Generate documentation for all packages
+.PHONY: document
+document: ## Generate documentation for all packages or a single package: make document path/to-package
+	@if [ "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		PKG="$(filter-out $@,$(MAKECMDGOALS))"; \
+		echo "Documenting package: $$PKG"; \
+		$(call doc_R_pkg, $$PKG); \
+	else \
+		echo "Documenting all packages"; \
+		$(MAKE) $(ALL_PKGS_D) .doc/base/all; \
+	fi
+
 install: $(ALL_PKGS_I) .install/base/all ## Install all packages
 check: $(ALL_PKGS_C) .check/base/all     ## Check all packages
 test: $(ALL_PKGS_T) .test/base/all       ## Test all packages
@@ -135,6 +145,7 @@ help: ## Show this help message
 	@echo "Examples:"
 	@echo "  make all     "
 	@echo "  make document"
+	@echo "  make document modules/assim.sequential  # Generate documentation for a specific package"
 	@echo ""
 	@echo "Notes:"
 	@echo "  - Components not included: cable (models), data.mining and DART (modules)."
