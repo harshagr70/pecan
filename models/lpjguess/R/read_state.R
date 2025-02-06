@@ -380,7 +380,6 @@ find_stream_type <- function(class = NULL, current_stream_var, LPJ_GUESS_CLASSES
 
 ###################################### READ STATE
 
-library(stringr)
 
 # this fcn is for potential natural vegetation only
 # when there is landcover, there will be more stand types
