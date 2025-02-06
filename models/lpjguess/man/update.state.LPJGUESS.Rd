@@ -37,7 +37,7 @@ so this argument allows adjustment.}
 And updated model state (as a big old list o' lists)
 }
 \description{
-updateState.LPJGUESS
+Adjust LPJ-GUESS state variables based on input parameters.
 }
 \details{
 Adjust LPJ-GUESS state
