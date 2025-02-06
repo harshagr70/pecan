@@ -14,6 +14,8 @@ write.config.LPJGUESS(defaults, trait.values, settings, run.id, restart = NULL)
 \item{settings}{list of settings from pecan settings file}
 
 \item{run.id}{id of run}
+
+\item{restart}{Logical, whether to restart the simulation.}
 }
 \value{
 configuration file for LPJ-GUESS for given run

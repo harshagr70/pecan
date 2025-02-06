@@ -9,6 +9,7 @@
 ##' @param trait.values vector of samples for a given trait
 ##' @param settings list of settings from pecan settings file
 ##' @param run.id id of run
+##' @param restart Logical, whether to restart the simulation.
 ##' @return configuration file for LPJ-GUESS for given run
 ##' @export
 ##' @author Istem Fer, Tony Gardella
@@ -82,6 +83,7 @@ write.config.LPJGUESS <- function(defaults, trait.values, settings, run.id, rest
 #' @param rundir rundir
 #' @param outdir outdir
 #' @param run.id PEcAn run ID
+#' @param restart Logical, whether to restart the simulation.
 #' @return settings Updated list
 #' @author Istem Fer
 write.insfile.LPJGUESS <- function(settings, trait.values, rundir, outdir, run.id, restart = NULL) {

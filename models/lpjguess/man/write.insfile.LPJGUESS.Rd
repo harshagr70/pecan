@@ -23,6 +23,8 @@ write.insfile.LPJGUESS(
 \item{outdir}{outdir}
 
 \item{run.id}{PEcAn run ID}
+
+\item{restart}{Logical, whether to restart the simulation.}
 }
 \value{
 settings Updated list

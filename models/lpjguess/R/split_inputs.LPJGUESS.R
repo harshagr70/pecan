@@ -59,7 +59,7 @@ split_inputs.LPJGUESS <- function(settings, start.time, stop.time, inputs, overw
   # cut where
   if(start.year == run.start){
     years <- start.year:end.year
-    inds  <- 1:sum(days_in_year(years))
+    inds  <- 1:sum(PEcAn.utils::days_in_year(years))
   }else{
     ### come back
   }

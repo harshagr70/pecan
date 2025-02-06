@@ -31,6 +31,8 @@
 ##' @param HEIGHT_MAX Maximum allowed height of an individual.  This is the maximum height that a tree
 ##' can have.  This is hard-coded in LPJ-GUESS to 150 m, but for SDA that might be unrealistically big, 
 ##' so this argument allows adjustment. 
+##' @param cmass.initial Initial carbon mass (kgC/m^2).
+##' @param restart Logical, whether to restart the simulation.
 ##' @return  And updated model state (as a big old list o' lists)
 ##' @export update.state.LPJGUESS 
 ##' @author Matthew Forrest
