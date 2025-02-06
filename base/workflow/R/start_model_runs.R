@@ -360,7 +360,7 @@ start_model_runs <- function(settings, write = TRUE, stop.on.error = TRUE) {
 runModule_start_model_runs <- function(settings, stop.on.error=TRUE) {
   if (PEcAn.settings::is.MultiSettings(settings) ||
       PEcAn.settings::is.Settings(settings)) {
-    write <- settings$database$bety$write
+    write <- isTRUE(settings$database$bety$write)
     return(start_model_runs(settings, write, stop.on.error))
   } else {
     PEcAn.logger::logger.severe(

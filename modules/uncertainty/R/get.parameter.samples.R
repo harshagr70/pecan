@@ -7,14 +7,18 @@
 ##' @export
 ##'
 ##' @author David LeBauer, Shawn Serbin, Istem Fer
+#' @importFrom purrr `%||%`
 ### Identify PFTs in the input settings.xml file
 get.parameter.samples <- function(settings, 
                                   posterior.files = rep(NA, length(settings$pfts)), 
                                   ens.sample.method = "uniform") {
   pfts      <- settings$pfts
-  num.pfts  <- length(settings$pfts)
   pft.names <- list()
   outdirs   <- list()
+
+  if (length(pfts) != length(posterior.files)) {
+    PEcAn.logger::logger.error("settings$pfts and posterior.files should be the same length")
+  }
 
   ## Open database connection
   con <- try(PEcAn.DB::db.open(settings$database$bety))
@@ -27,12 +31,8 @@ get.parameter.samples <- function(settings,
   }
   
   for (i.pft in seq_along(pfts)) {
-    pft.names[i.pft] <- settings$pfts[[i.pft]]$name
-    
-    ### If no PFT(s) are specified insert NULL to warn user
-    if (length(pft.names) == 0) {
-      pft.names[1] <- "NULL"
-    }
+    # If no name given, use string "NULL" to warn user
+    pft.names[i.pft] <- settings$pfts[[i.pft]]$name %||% "NULL"
     
     ### Get output directory info
     if(!is.null(settings$pfts[[i.pft]]$outdir)){
@@ -60,7 +60,7 @@ get.parameter.samples <- function(settings,
     if (!is.na(posterior.files[i])) {
       # Load specified file
       load(posterior.files[i], envir = distns)
-      if (is.null(distns$prior.distns) & !is.null(distns$post.distns)) {
+      if (is.null(distns$prior.distns) && !is.null(distns$post.distns)) {
         distns$prior.distns <- distns$post.distns
       }
     } else {
@@ -75,7 +75,8 @@ get.parameter.samples <- function(settings,
     }
     
     ### Load trait mcmc data (if exists, either from MA or PDA)
-    if (!is.null(settings$pfts[[i]]$posteriorid) && !inherits(con, "try-error")) {# first check if there are any files associated with posterior ids
+    if (!is.null(settings$pfts[[i]]$posteriorid) && !is.null(con)) {
+      # first check if there are any files associated with posterior ids
       files <- PEcAn.DB::dbfile.check("Posterior",
                                       settings$pfts[[i]]$posteriorid, 
                                       con, settings$host$name, return.all = TRUE)
@@ -190,12 +191,15 @@ get.parameter.samples <- function(settings,
                                      quantiles = quantiles)
   }
   if ("ensemble" %in% names(settings)) {
+    #if it's not there it's one probably
+    if (is.null(settings$ensemble$size)) settings$ensemble$size <- 1
     if (settings$ensemble$size == 1) {
       ## run at median if only one run in ensemble
-      ensemble.samples <- PEcAn.utils::get.sa.sample.list(pft = trait.samples, env = env.samples, 
-                                             quantiles = 0.5)
-      #if it's not there it's one probably
-      if (is.null(settings$ensemble$size)) settings$ensemble$size<-1
+      ensemble.samples <- PEcAn.utils::get.sa.sample.list(
+        pft = trait.samples,
+        env = env.samples,
+        quantiles = 0.5
+      )
     } else if (settings$ensemble$size > 1) {
       
       ## subset the trait.samples to ensemble size using Halton sequence
