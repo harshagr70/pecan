@@ -15,7 +15,8 @@ Imports:
     lubridate (>= 1.6.0),
     ncdf4 (>= 1.15),
     Rcpp (>= 1.0.1),
-    tibble
+    tibble,
+    stringr
 Suggests:
     testthat (>= 1.0.2)
 SystemRequirements: LPJ-GUESS model
