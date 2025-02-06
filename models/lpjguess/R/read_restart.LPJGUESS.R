@@ -37,7 +37,7 @@ read_restart.LPJGUESS <- function(outdir, runid, stop.time, settings, var.names,
       cmass_heart_perpft <- calculateGridcellVariablePerPFT(model.state = Gridcell_container, variable = "cmass_heart")
       
       cmass_wood <- cmass_sap_perpft + cmass_heart_perpft
-      cmass_wood <- udunits2::ud.convert(cmass_wood, "kg/m^2", "Mg/ha")
+      cmass_wood <- PEcAn.utils::ud_convert(cmass_wood, "kg/m^2", "Mg/ha")
       
       # calculate below ground and subtract
       # 0.23 magic number from Chojnacky Table 6
