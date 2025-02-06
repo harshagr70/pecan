@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // allocation
 List allocation(double bminc, double cmass_leaf, double cmass_root, double cmass_sap, double cmass_debt, double cmass_heart, double ltor, double height, double sla, double wooddens, int lifeform, double k_latosa, double k_allom2, double k_allom3, double& cmass_leaf_inc, double& cmass_root_inc, double& cmass_sap_inc, double& cmass_debt_inc, double& cmass_heart_inc, double& litter_leaf_inc, double& litter_root_inc, double& exceeds_cmass);
 RcppExport SEXP _PEcAn_LPJGUESS_allocation(SEXP bmincSEXP, SEXP cmass_leafSEXP, SEXP cmass_rootSEXP, SEXP cmass_sapSEXP, SEXP cmass_debtSEXP, SEXP cmass_heartSEXP, SEXP ltorSEXP, SEXP heightSEXP, SEXP slaSEXP, SEXP wooddensSEXP, SEXP lifeformSEXP, SEXP k_latosaSEXP, SEXP k_allom2SEXP, SEXP k_allom3SEXP, SEXP cmass_leaf_incSEXP, SEXP cmass_root_incSEXP, SEXP cmass_sap_incSEXP, SEXP cmass_debt_incSEXP, SEXP cmass_heart_incSEXP, SEXP litter_leaf_incSEXP, SEXP litter_root_incSEXP, SEXP exceeds_cmassSEXP) {
