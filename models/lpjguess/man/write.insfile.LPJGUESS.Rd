@@ -4,8 +4,14 @@
 \alias{write.insfile.LPJGUESS}
 \title{Write LPJ-GUESS instruction script}
 \usage{
-write.insfile.LPJGUESS(settings, trait.values, rundir, outdir, run.id,
-  restart = NULL)
+write.insfile.LPJGUESS(
+  settings,
+  trait.values,
+  rundir,
+  outdir,
+  run.id,
+  restart = NULL
+)
 }
 \arguments{
 \item{settings}{PEcAn settings list}

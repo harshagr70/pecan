@@ -4,8 +4,14 @@
 \alias{update.state.LPJGUESS}
 \title{updateState.LPJGUESS}
 \usage{
-\method{update}{state.LPJGUESS}(model.state, dens.initial, dens.target,
-  cmass.initial, cmass.target, HEIGHT_MAX = 150)
+\method{update}{state.LPJGUESS}(
+  model.state,
+  dens.initial,
+  dens.target,
+  cmass.initial,
+  cmass.target,
+  HEIGHT_MAX = 150
+)
 }
 \arguments{
 \item{model.state}{A large multiply-nested list containing the entire LPJ-GUESS state as read by 
@@ -26,16 +32,12 @@ using state data assimilation from function XXXXXX}
 \item{HEIGHT_MAX}{Maximum allowed height of an individual.  This is the maximum height that a tree
 can have.  This is hard-coded in LPJ-GUESS to 150 m, but for SDA that might be unrealistically big, 
 so this argument allows adjustment.}
-
-\item{cmass.target}{A numeric vector of the target stand-level biomasses (kgC/m^2) as named numeric vector 
-with one entry per PFT/species, with the names being the PFT/species codes.  These values should be produced
-using state data assimilation from function XXXXXX}
 }
 \value{
 And updated model state (as a big old list o' lists)
 }
 \description{
-
+Adjust LPJ-GUESS state variables based on input parameters.
 }
 \details{
 Adjust LPJ-GUESS state

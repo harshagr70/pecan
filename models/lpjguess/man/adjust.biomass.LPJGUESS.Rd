@@ -4,8 +4,16 @@
 \alias{adjust.biomass.LPJGUESS}
 \title{Adjust LPJ-GUESS individual's biomass}
 \usage{
-adjust.biomass.LPJGUESS(individual, rel.change, sla, wooddens, lifeform,
-  k_latosa, k_allom2, k_allom3)
+adjust.biomass.LPJGUESS(
+  individual,
+  rel.change,
+  sla,
+  wooddens,
+  lifeform,
+  k_latosa,
+  k_allom2,
+  k_allom3
+)
 }
 \arguments{
 \item{individual}{A nested list which encapsulates an LPJ-GUESS 'Individual' as read from a binary state file}

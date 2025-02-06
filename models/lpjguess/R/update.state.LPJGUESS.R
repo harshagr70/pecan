@@ -11,7 +11,7 @@
 ##'
 ##' @title updateState.LPJGUESS
 ##'
-##' @description 
+##' @description Adjust LPJ-GUESS state variables based on input parameters.
 ##'
 ##'
 ##' @param model.state A large multiply-nested list containing the entire LPJ-GUESS state as read by 
