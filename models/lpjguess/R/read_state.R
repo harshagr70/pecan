@@ -130,11 +130,15 @@ serialize_starts_ends <- function(file_in, pattern = "void Gridcell::serialize")
 find_closing <- function(find = "}", line_no, file_in, if_else_check = FALSE){
   opened <- 1
   closed <- 0
-  if(find == "}"){
-    start_char <- "{"
-    end_char   <- "}"
-  }else{
-    #there can be else-ifs, find closing paranthesis / square breacket etc
+  
+  # Define matching start and end characters
+  bracket_pairs <- list("{" = "}", "[" = "]", "(" = ")")
+  
+  if(find %in% names(bracket_pairs)){
+    start_char <- find
+    end_char   <- bracket_pairs[[find]]
+  } else {
+    stop("Unsupported bracket type: ", find)
   }
   
   # check the immediate line and return if closed there already
