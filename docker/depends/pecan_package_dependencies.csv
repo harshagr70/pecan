@@ -658,6 +658,7 @@
 "utils","*","base/logger","Imports",FALSE
 "utils","*","models/ed","Imports",FALSE
 "utils","*","models/linkages","Imports",FALSE
+"utils","*","models/lpjguess","Imports",FALSE
 "utils","*","modules/allometry","Imports",FALSE
 "utils","*","modules/assim.batch","Imports",FALSE
 "utils","*","modules/assim.sequential","Suggests",FALSE
