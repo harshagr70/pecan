@@ -11,6 +11,7 @@
 ##' @description Splits climate met for LPJGUESS
 ##' 
 ##' @return name of the split met file
+##' @importFrom PEcAn.utils days_in_year
 ##' @export
 split_inputs.LPJGUESS <- function(settings, start.time, stop.time, inputs, overwrite = FALSE, outpath = NULL){
   

@@ -91,6 +91,7 @@ find_stream_var <- function(file_in, line_nos){
 #' @examples
 #' file_content <- c("serialize: start", "some data", "serialize: end")
 #' serialize_starts_ends(file_content, "serialize")
+#' @importFrom stringr str_match
 # helper function that scans LPJ-GUESS that returns the beginning and the ending lines of serialized object
 serialize_starts_ends <- function(file_in, pattern = "void Gridcell::serialize"){
   # find the starting line from the given pattern
@@ -166,6 +167,8 @@ find_closing <- function(find = "}", line_no, file_in, if_else_check = FALSE){
 #' @examples
 #' file_content <- c("arch & var1;", "arch & var2;")
 #' find_stream_size(file_content, c(1, 2))
+#' @importFrom stringr str_match
+#' @importFrom utils glob2rx
 # helper function that determines the stream size to read
 find_stream_size <- function(current_stream_type, guessh_in, LPJ_GUESS_TYPES, LPJ_GUESS_CONST_INTS){
   
@@ -471,6 +474,8 @@ find_stream_type <- function(class = NULL, current_stream_var, LPJ_GUESS_CLASSES
 #'
 #' @param file_path A character string specifying the path to the binary file.
 #' @param variable_name A character string specifying the name of the variable to extract.
+#' @importFrom stringr str_match
+#' @importFrom utils glob2rx
 #' @return A matrix or list containing the extracted data.
 read_binary_LPJGUESS <- function(outdir, version = "PalEON"){
   

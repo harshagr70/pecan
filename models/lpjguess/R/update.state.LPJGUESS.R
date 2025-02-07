@@ -1,3 +1,12 @@
+#-------------------------------------------------------------------------------
+# Copyright (c) 2012 University of Illinois, NCSA.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the 
+# University of Illinois/NCSA Open Source License
+# which accompanies this distribution, and is available at
+# http://opensource.ncsa.illinois.edu/license.html
+#-------------------------------------------------------------------------------
+
 ##' Adjust LPJ-GUESS state
 ##'
 ##' @title updateState.LPJGUESS
@@ -25,9 +34,9 @@
 ##' @param cmass.initial Initial carbon mass (kgC/m^2).
 ##' @param restart Logical, whether to restart the simulation.
 ##' @return  And updated model state (as a big old list o' lists)
-##' @export update.state.LPJGUESS 
+##' @export update_state_LPJGUESS 
 ##' @author Matthew Forrest
-update.state.LPJGUESS <- function(model.state, dens.initial, dens.target, cmass.initial, cmass.target, HEIGHT_MAX = 150) {
+update_state_LPJGUESS <- function(model.state, dens.initial, dens.target, cmass.initial, cmass.target, HEIGHT_MAX = 150) {
   
   
   # calculate relative increases to be applied later on (per PFT)
