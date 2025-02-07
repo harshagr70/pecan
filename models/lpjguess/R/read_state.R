@@ -121,6 +121,7 @@ serialize_starts_ends <- function(file_in, pattern = "void Gridcell::serialize")
 #' @param line_no A numeric value indicating the line number to start the search.
 #' @param file_in A character vector of the file content.
 #' @param if_else_check Optional. A logical value indicating whether to check for if/else blocks (default is FALSE).
+#' @export
 #' @return A numeric value indicating the line number of the matching closing bracket.
 #' @examples
 #' file_content <- c("{", "some code", "}")
