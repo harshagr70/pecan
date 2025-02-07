@@ -152,8 +152,10 @@ find_closing <- function(find = "}", line_no, file_in, if_else_check = FALSE){
 #'
 #' Determines the size (number of variables) in a stream based on the file content.
 #'
-#' @param file_in A character vector representing the file content.
-#' @param line_nos A numeric vector of length 2, specifying the start and end lines to check for streamed variables.
+#' @param current_stream_type A list containing details of the current stream.
+#' @param guessh_in A character vector of LPJ-GUESS header file content.
+#' @param LPJ_GUESS_TYPES A character vector of recognized LPJ-GUESS types.
+#' @param LPJ_GUESS_CONST_INTS A dataframe mapping LPJ-GUESS constants to their values.
 #' @return A numeric value representing the size (number of streamed variables).
 #' @importFrom stringr str_match
 #' @importFrom utils glob2rx
@@ -312,11 +314,13 @@ read_state <- function(file_path) {
 
 #' Find Stream Type
 #'
-#' Determines the type of stream variables in the file content.
+#' Determines the type of a given stream variable in an LPJ-GUESS file.
 #'
-#' @param class A character string representing the class of the current stream, default is NULL.
-#' @param current_stream_type A character string representing the current stream type, default is NULL.
-#' @param LPJ_GUESS_CLASSES A list containing mappings of classes to stream types.
+#' @param class A character string representing the class of the stream variable (default is NULL).
+#' @param current_stream_var A character string representing the current stream variable.
+#' @param LPJ_GUESS_CLASSES A character vector of LPJ-GUESS class names.
+#' @param LPJ_GUESS_TYPES A character vector of recognized LPJ-GUESS types.
+#' @param guessh_in A character vector of LPJ-GUESS header file content.
 #' @return A character string indicating the stream type.
 # helper function to decide the type of the stream
 # this function relies on the architecture of LPJ-GUESS and has bunch of harcoded checks, see model documentation
@@ -454,10 +458,10 @@ find_stream_type <- function(class = NULL, current_stream_var, LPJ_GUESS_CLASSES
 # outdir, at least model version, maybe also settings
 #' Read Binary File for LPJ-GUESS
 #'
-#' Reads a binary file formatted for LPJ-GUESS and converts it into a usable structure.
+#' Reads a binary file formatted for LPJ-GUESS and extracts relevant data.
 #'
-#' @param file_path A character string specifying the path to the binary file.
-#' @param variable_name A character string specifying the name of the variable to extract.
+#' @param outdir A character string specifying the output directory containing the binary state files.
+#' @param version A character string specifying the LPJ-GUESS version (default is "PalEON").
 #' @importFrom stringr str_match
 #' @importFrom utils glob2rx
 #' @return A matrix or list containing the extracted data.

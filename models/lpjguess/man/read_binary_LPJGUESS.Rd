@@ -7,13 +7,13 @@
 read_binary_LPJGUESS(outdir, version = "PalEON")
 }
 \arguments{
-\item{file_path}{A character string specifying the path to the binary file.}
+\item{outdir}{A character string specifying the output directory containing the binary state files.}
 
-\item{variable_name}{A character string specifying the name of the variable to extract.}
+\item{version}{A character string specifying the LPJ-GUESS version (default is "PalEON").}
 }
 \value{
 A matrix or list containing the extracted data.
 }
 \description{
-Reads a binary file formatted for LPJ-GUESS and converts it into a usable structure.
+Reads a binary file formatted for LPJ-GUESS and extracts relevant data.
 }

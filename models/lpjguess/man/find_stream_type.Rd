@@ -13,15 +13,19 @@ find_stream_type(
 )
 }
 \arguments{
-\item{class}{A character string representing the class of the current stream, default is NULL.}
+\item{class}{A character string representing the class of the stream variable (default is NULL).}
 
-\item{LPJ_GUESS_CLASSES}{A list containing mappings of classes to stream types.}
+\item{current_stream_var}{A character string representing the current stream variable.}
 
-\item{current_stream_type}{A character string representing the current stream type, default is NULL.}
+\item{LPJ_GUESS_CLASSES}{A character vector of LPJ-GUESS class names.}
+
+\item{LPJ_GUESS_TYPES}{A character vector of recognized LPJ-GUESS types.}
+
+\item{guessh_in}{A character vector of LPJ-GUESS header file content.}
 }
 \value{
 A character string indicating the stream type.
 }
 \description{
-Determines the type of stream variables in the file content.
+Determines the type of a given stream variable in an LPJ-GUESS file.
 }

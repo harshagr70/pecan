@@ -12,9 +12,13 @@ find_stream_size(
 )
 }
 \arguments{
-\item{file_in}{A character vector representing the file content.}
+\item{current_stream_type}{A list containing details of the current stream.}
 
-\item{line_nos}{A numeric vector of length 2, specifying the start and end lines to check for streamed variables.}
+\item{guessh_in}{A character vector of LPJ-GUESS header file content.}
+
+\item{LPJ_GUESS_TYPES}{A character vector of recognized LPJ-GUESS types.}
+
+\item{LPJ_GUESS_CONST_INTS}{A dataframe mapping LPJ-GUESS constants to their values.}
 }
 \value{
 A numeric value representing the size (number of streamed variables).
