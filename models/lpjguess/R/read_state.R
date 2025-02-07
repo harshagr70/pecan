@@ -123,9 +123,6 @@ serialize_starts_ends <- function(file_in, pattern = "void Gridcell::serialize")
 #' @param if_else_check Optional. A logical value indicating whether to check for if/else blocks (default is FALSE).
 #' @export
 #' @return A numeric value indicating the line number of the matching closing bracket.
-#' @examples
-#' file_content <- c("{", "some code", "}")
-#' find_closing("{", 1, file_content)
 # helper function that finds the closing bracket, can work over if-else
 find_closing <- function(find = "}", line_no, file_in, if_else_check = FALSE){
   opened <- 1

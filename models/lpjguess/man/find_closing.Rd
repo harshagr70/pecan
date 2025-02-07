@@ -21,7 +21,3 @@ A numeric value indicating the line number of the matching closing bracket.
 \description{
 Identifies the line number of the matching closing bracket for a given opening bracket.
 }
-\examples{
-file_content <- c("{", "some code", "}")
-find_closing("{", 1, file_content)
-}
