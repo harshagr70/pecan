@@ -34,8 +34,6 @@ using state data assimilation from function XXXXXX}
 \item{HEIGHT_MAX}{Maximum allowed height of an individual.  This is the maximum height that a tree
 can have.  This is hard-coded in LPJ-GUESS to 150 m, but for SDA that might be unrealistically big, 
 so this argument allows adjustment.}
-
-\item{restart}{Logical, whether to restart the simulation.}
 }
 \value{
 And updated model state (as a big old list o' lists)
