@@ -25,6 +25,3 @@ A character string indicating the stream type.
 \description{
 Determines the type of stream variables in the file content.
 }
-\examples{
-find_stream_type(class = "soil", current_stream_type = NULL, LPJ_GUESS_CLASSES = list(soil = "stream"))
-}

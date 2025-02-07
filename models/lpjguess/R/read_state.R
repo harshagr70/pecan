@@ -8,10 +8,6 @@
 #' @param file_in A character vector representing the file content to search through.
 #' @param line_nos A numeric vector of length 2, specifying the start and end lines to search for streamed variables.
 #' @return A character vector of streamed variable names.
-#' @examples
-#' # Example usage:
-#' file_content <- c("arch & var1;", "arch & var2;")
-#' find_stream_var(file_content, c(1, 2))
 # helper function that lists streamed variables, it just returns the names, types are checked by other fucntion
 find_stream_var <- function(file_in, line_nos){
   
@@ -88,9 +84,6 @@ find_stream_var <- function(file_in, line_nos){
 #' @param file_in A character vector of file lines to search through.
 #' @param pattern A character string pattern to look for in the file.
 #' @return A numeric vector of length 2, giving the start and end line numbers.
-#' @examples
-#' file_content <- c("serialize: start", "some data", "serialize: end")
-#' serialize_starts_ends(file_content, "serialize")
 #' @importFrom stringr str_match
 # helper function that scans LPJ-GUESS that returns the beginning and the ending lines of serialized object
 serialize_starts_ends <- function(file_in, pattern = "void Gridcell::serialize"){
@@ -162,9 +155,6 @@ find_closing <- function(find = "}", line_no, file_in, if_else_check = FALSE){
 #' @param file_in A character vector representing the file content.
 #' @param line_nos A numeric vector of length 2, specifying the start and end lines to check for streamed variables.
 #' @return A numeric value representing the size (number of streamed variables).
-#' @examples
-#' file_content <- c("arch & var1;", "arch & var2;")
-#' find_stream_size(file_content, c(1, 2))
 #' @importFrom stringr str_match
 #' @importFrom utils glob2rx
 # helper function that determines the stream size to read
@@ -316,8 +306,6 @@ find_stream_size <- function(current_stream_type, guessh_in, LPJ_GUESS_TYPES, LP
 #'
 #' @param file_path A character string specifying the path to the state file.
 #' @return A list containing the processed state information.
-#' @examples
-#' state <- read_state("path/to/statefile.txt")
 read_state <- function(file_path) {
   # Function body
 }
@@ -330,8 +318,6 @@ read_state <- function(file_path) {
 #' @param current_stream_type A character string representing the current stream type, default is NULL.
 #' @param LPJ_GUESS_CLASSES A list containing mappings of classes to stream types.
 #' @return A character string indicating the stream type.
-#' @examples
-#' find_stream_type(class = "soil", current_stream_type = NULL, LPJ_GUESS_CLASSES = list(soil = "stream"))
 # helper function to decide the type of the stream
 # this function relies on the architecture of LPJ-GUESS and has bunch of harcoded checks, see model documentation
 find_stream_type <- function(class = NULL, current_stream_var, LPJ_GUESS_CLASSES, LPJ_GUESS_TYPES, guessh_in){

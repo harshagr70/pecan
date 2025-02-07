@@ -15,6 +15,3 @@ A list containing the processed state information.
 \description{
 Reads a state file and processes its contents for further use.
 }
-\examples{
-state <- read_state("path/to/statefile.txt")
-}

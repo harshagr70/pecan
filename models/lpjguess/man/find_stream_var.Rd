@@ -17,8 +17,3 @@ A character vector of streamed variable names.
 \description{
 A helper function that lists streamed variables. It returns the names of streamed variables.
 }
-\examples{
-# Example usage:
-file_content <- c("arch & var1;", "arch & var2;")
-find_stream_var(file_content, c(1, 2))
-}

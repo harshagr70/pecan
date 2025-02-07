@@ -22,7 +22,3 @@ A numeric value representing the size (number of streamed variables).
 \description{
 Determines the size (number of variables) in a stream based on the file content.
 }
-\examples{
-file_content <- c("arch & var1;", "arch & var2;")
-find_stream_size(file_content, c(1, 2))
-}
