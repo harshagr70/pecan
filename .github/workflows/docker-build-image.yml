@@ -34,9 +34,6 @@ on:
       DOCKERHUB_PASSWORD:
         description: 'DockerHub password used to push images'
         required: false
-      GITHUB_TOKEN:
-        description: 'GitHub token used to push images to GitHub Container Registry'
-        required: false
 
 jobs:
   build:
