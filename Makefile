@@ -104,17 +104,20 @@ depends = .doc/$(1) .install/$(1) .check/$(1) .test/$(1)
 .PHONY: all install check test document shiny \
             check_base check_models check_modules 
 
-all: install document ## Install all packages and generate documentation
+#' all: Install all packages and generate documentation
+all: install document
 
-check_base: $(BASE_C)     ## Check base packages  
-check_models: $(MODELS_C) ## Check model packages   
+#' check_base: Run R package checks on all in base/
+#' check_models: Run R package checks on all in models/
+#' check_modules: Run R package checks on all in modules/
+#    Note: Installs base first as Modules has a circular dependency on base
+check_base: $(BASE_C)
+check_models: $(MODELS_C)
+check_modules: $(BASE_I) $(MODULES_C)
 
-# Install base first as Modules has a circular dependency on base,
-# and then run a check on modules
-check_modules: $(BASE_I) $(MODULES_C) ## Install base packages, check module packages
-
+#' document: Generate function documentation for packages
 .PHONY: document
-document: ## Generate documentation for all packages or a single package: make document path/to-package
+document:
 	@if [ "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		PKG="$(filter-out $@,$(MAKECMDGOALS))"; \
 		echo "Documenting package: $$PKG"; \
@@ -124,22 +127,26 @@ document: ## Generate documentation for all packages or a single package: make d
 		$(MAKE) $(ALL_PKGS_D) .doc/base/all; \
 	fi
 
-install: $(ALL_PKGS_I) .install/base/all ## Install all packages
-check: $(ALL_PKGS_C) .check/base/all     ## Check all packages
-test: $(ALL_PKGS_T) .test/base/all       ## Test all packages
-shiny: $(SHINY_I)                        ## Install Shiny app dependencies
+#' install: Install all packages
+#' check: Run R package checks on all packages
+#' test: Run unit tests on all packages
+#' shiny: Install dependencies for Shiny apps
+install: $(ALL_PKGS_I) .install/base/all
+check: $(ALL_PKGS_C) .check/base/all
+test: $(ALL_PKGS_T) .test/base/all
+shiny: $(SHINY_I)
 
 
+#' book: Render the PEcAn bookdown documentation
 book: 
-	cd ./book_source && make build ## Render the PEcAn bookdown documentation
+	cd ./book_source && make build
 
 # Make the timestamp directories if they don't exist yet
 .doc .install .check .test .shiny_depends $(call depends,base) $(call depends,models) $(call depends,modules):
 	mkdir -p $@
 
-### Help
-
-help: ## Show this help message
+#' help: Show this help message
+help:
 	@echo "Usage: make [target]"
 	@echo ""
 	@echo "Examples:"
@@ -153,8 +160,7 @@ help: ## Show this help message
 	@echo "  - Before submitting a PR, please ensure that all tests pass, code is linted, and documentation is up-to-date."
 	@echo ""
 	@echo "Available targets:"
-	@grep -h -E '^[a-zA-Z0-9_-]+:.*?## ' $(MAKEFILE_LIST) | \
-		awk 'BEGIN {FS = ":.*?## "}; {printf "  %-20s %s\n", $$1, $$2}'
+	@grep -h "^#' " $(MAKEFILE_LIST) | cut -d' ' -f2- | sort
 
 
 ### Dependencies
@@ -168,11 +174,12 @@ $(subst .doc/models/template,,$(MODELS_D)): .install/models/template
 # target need not be rebuilt when a prerequisite changes)
 include Makefile.depends
 
+#' clean: Remove build artifacts
 .PHONY: clean
 clean: 
 	rm -rf .install .check .test .doc
 	find modules/rtm/src \( -name \*.mod -o -name \*.o -o -name \*.so \) -delete
-	find models/basgra/src \( -name \*.mod -o -name \*.o -o -name \*.so \) -delete ## Clean build artifacts.
+	find models/basgra/src \( -name \*.mod -o -name \*.o -o -name \*.so \) -delete
 
 .install/devtools: | .install
 	+ ./scripts/time.sh "devtools ${1}" Rscript -e ${SETROPTIONS} -e "if(!requireNamespace('devtools', quietly = TRUE)) install.packages('devtools')"
