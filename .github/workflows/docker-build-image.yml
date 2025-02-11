@@ -27,6 +27,13 @@ on:
         required: false
         default: "linux/amd64"
         type: string
+    secrets:
+      DOCKERHUB_USERNAME:
+        description: 'DockerHub username used to push images'
+        required: false
+      DOCKERHUB_PASSWORD:
+        description: 'DockerHub password used to push images'
+        required: false
 
 jobs:
   build:
@@ -46,7 +53,7 @@ jobs:
         run: |
           REGISTRY=$(
             [[ ${{ github.event_name }} == 'pull_request' ]] &&
-            echo "ghcr.io/${{ github.actor }}/${{ github.repository }}" ||
+            echo "ghcr.io/${{ github.repository_owner }}/${{ github.repository }}" ||
             echo "docker.io/pecan")
           echo "PARENT_IMAGE_IF_SET=$(
             [[ -n '${{ inputs.parent-image }}' ]] &&
@@ -66,13 +73,15 @@ jobs:
 
       # create metadata for image
       - name: Docker meta
+        env:
+          check_var: ${{ secrets.DOCKERHUB_USERNAME }}
         id: meta
         uses: docker/metadata-action@v5
         with:
           # list of Docker images to use as base name for tags
           images: |
-            name=ghcr.io/${{ github.actor }}/${{ github.repository }}/${{ steps.name.outputs.image_name }}
-            name=pecan/${{ steps.name.outputs.image_name }},enable=${{ github.event_name != 'pull_request' }}
+            name=ghcr.io/${{ github.repository_owner }}/${{ steps.name.outputs.image_name }}
+            name=pecan/${{ steps.name.outputs.image_name }},enable=${{ env.check_var != null }}
           # generate Docker tags based on the following events/attributes
           tags: |
             type=schedule
@@ -100,7 +109,9 @@ jobs:
 
       # login to registries
       - name: Login to DockerHub
-        if: github.event_name != 'pull_request'
+        env: 
+          check_var: ${{ secrets.DOCKERHUB_USERNAME }}
+        if: env.check_var != null && github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -110,7 +121,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # build the docker images
