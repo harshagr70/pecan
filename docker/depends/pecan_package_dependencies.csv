@@ -457,6 +457,8 @@
 "raster","*","modules/data.atmosphere","Imports",FALSE
 "raster","*","modules/data.land","Suggests",FALSE
 "raster","*","modules/data.remote","Suggests",FALSE
+"Rcpp","*","models/lpjguess","LinkingTo",FALSE
+"Rcpp",">= 1.0.1","models/lpjguess","Imports",FALSE
 "rcrossref","*","base/db","Suggests",FALSE
 "readr","*","models/ldndc","Imports",FALSE
 "readr","*","modules/assim.sequential","Suggests",FALSE
@@ -573,6 +575,7 @@
 "stringi","*","base/logger","Imports",FALSE
 "stringi","*","base/utils","Imports",FALSE
 "stringr","*","models/fates","Imports",FALSE
+"stringr","*","models/lpjguess","Imports",FALSE
 "stringr","*","modules/assim.sequential","Imports",FALSE
 "stringr","*","modules/benchmark","Imports",FALSE
 "stringr","*","modules/data.land","Imports",FALSE
@@ -655,6 +658,7 @@
 "utils","*","base/logger","Imports",FALSE
 "utils","*","models/ed","Imports",FALSE
 "utils","*","models/linkages","Imports",FALSE
+"utils","*","models/lpjguess","Imports",FALSE
 "utils","*","modules/allometry","Imports",FALSE
 "utils","*","modules/assim.batch","Imports",FALSE
 "utils","*","modules/assim.sequential","Suggests",FALSE

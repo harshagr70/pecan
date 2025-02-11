@@ -14,7 +14,10 @@ Imports:
     PEcAn.utils,
     lubridate (>= 1.6.0),
     ncdf4 (>= 1.15),
-    tibble
+    Rcpp (>= 1.0.1),
+    tibble,
+    stringr,
+    utils
 Suggests:
     testthat (>= 1.0.2)
 SystemRequirements: LPJ-GUESS model
@@ -25,3 +28,4 @@ LazyLoad: yes
 LazyData: FALSE
 Encoding: UTF-8
 RoxygenNote: 7.3.2
+LinkingTo: Rcpp
