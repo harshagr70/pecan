@@ -160,7 +160,7 @@ help:
 	@echo "  - Before submitting a PR, please ensure that all tests pass, code is linted, and documentation is up-to-date."
 	@echo ""
 	@echo "Available targets:"
-	@grep -h "^#' " $(MAKEFILE_LIST) | cut -d' ' -f2- | sort
+	@grep -h "^#' " $(MAKEFILE_LIST) | cut -d' ' -f2- | sort | column -t -s ':' | sed 's/^/  /'
 
 
 ### Dependencies
