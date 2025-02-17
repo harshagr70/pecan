@@ -52,7 +52,7 @@ model2netcdf.LINKAGES <- function(outdir, sitelat, sitelon, start_date = NULL,
     output[[1]]  <- linkages_env$ag.biomass[y, ]  # Above Ground Biomass in kgC/m2
     output[[2]]  <- linkages_env$ag.biomass[y, ]  # Total Live Biomass in kgC/m2 (no distinction from AGB in linkages)
     output[[3]]  <- linkages_env$total.soil.carbon[y, ]  # TotSoilCarb in kgC/m2
-    output[[4]]  <- c(linkages_env$ag.biomass[y, ], linkages_env$total.soil.carbon[y, ], linkages_env$leaf.litter[y, ], area[y, ])  # Carb Pools in kgC/m2
+    output[[4]]  <- c(linkages_env$ag.biomass[y, ], linkages_env$total.soil.carbon[y, ], linkages_env$leaf.litter[y, ], linkages_env$area[y, ])  # Carb Pools in kgC/m2
     output[[5]]  <- c("AGB", "Soil Organic Matter", "Leaf Litter", "LAI")  # poolname
     output[[6]]  <- linkages_env$ag.npp[y, ]  # GWBI = NPP in linkages
     output[[7]]  <- linkages_env$hetero.resp[y, ]  # HeteroResp in kgC/m^2/s
@@ -63,7 +63,7 @@ model2netcdf.LINKAGES <- function(outdir, sitelat, sitelon, start_date = NULL,
     output[[12]] <- linkages_env$f.comp[, y]
     output[[13]] <- linkages_env$area[y, ]  #LAI
     output[[14]] <- linkages_env$water[y, ]  #soil moisture
-    output[[15]] <- abvgroundwood.biomass[y,] #AbvGroundWood just wood no leaves
+    output[[15]] <- linkages_env$abvgroundwood.biomass[y,] #AbvGroundWood just wood no leaves
     output[[16]] <- seq_along(pft_names) 
     
     # ******************** Declare netCDF variables ********************#
