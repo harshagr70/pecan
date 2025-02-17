@@ -16,6 +16,8 @@ model2netcdf.LINKAGES <- function(outdir, sitelat, sitelon, start_date = NULL,
                                   end_date = NULL, pft_names = NULL) {
   # , PFTs) { logger.severe('NOT IMPLEMENTED')
   
+  ## Create a new enviroment 
+  linkages_env <- new.env()
   ### Read in model output in linkages format
   load(file.path(outdir, "linkages.out.Rdata"))
   # linkages.output.dims <- dim(linkages.output)
