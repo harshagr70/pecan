@@ -60,6 +60,8 @@ jobs:
         if: github.event_name != 'schedule'
         run: echo "R_VERSION=${{ github.event.inputs.r_version || '4.1' }}" >> "$GITHUB_OUTPUT"
     outputs:
+      # Note: "steps.*" seems to mean "all step ids", not "all steps"
+      # If seeing weird results here, check that all steps above have an id set.
       R_VERSION: ${{ join(steps.*.outputs.R_VERSION, '') }}
 
   # ----------------------------------------------------------------------
