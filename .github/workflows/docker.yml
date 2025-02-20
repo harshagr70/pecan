@@ -55,7 +55,7 @@ jobs:
         run: echo "R_VERSION=${{ github.event.inputs.r_version || '4.1' }}" >> "$GITHUB_OUTPUT"
     outputs:
       R_VERSION: ${{ join(steps.*.outputs.R_VERSION, '') }}
-
+      TEST_CONST: 3
 
   # ----------------------------------------------------------------------
   # depends image has all the dependencies installed
