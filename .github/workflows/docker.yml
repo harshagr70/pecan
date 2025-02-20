@@ -53,10 +53,16 @@ jobs:
         run: echo "R_VERSION=4.1" >> "$GITHUB_OUTPUT"
       - if: github.event_name != 'schedule'
         run: echo "R_VERSION=${{ github.event.inputs.r_version || '4.1' }}" >> "$GITHUB_OUTPUT"
+      - id: addstr
+        run: echo "R_VER=RRR${{ github.event.inputs.r_version || '4.1' }}" >> "$GITHUB_OUTPUT"
       - id: out
         run: echo "out=${{ join(steps.*.outputs.R_VERSION, '') }}" >> "$GITHUB_OUTPUT"
+      - id: out2
+        run: echo "out=RRR${{ join(steps.*.outputs.R_VERSION, '') }}" >> "$GITHUB_OUTPUT"
     outputs:
       TEST_OUTPUT: ${{ steps.out.outputs.out }}
+      TEST_OUTPUT2: ${{ steps.out2.outputs.out }}
+      TEST_OUTPUT3: ${{ steps.addstr.outputs.R_VER }}
       R_VERSION: ${{ join(steps.*.outputs.R_VERSION, '') }}
       TEST_CONST: 3
 
