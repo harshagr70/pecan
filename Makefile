@@ -44,6 +44,8 @@ MODELS_D := $(MODELS:%=.doc/%)
 MODULES_D := $(MODULES:%=.doc/%)
 ALL_PKGS_D := $(BASE_D) $(MODULES_D) $(MODELS_D)
 
+SRC_PKGS := $(strip $(foreach d,$(ALL_PKGS),$(wildcard ${d}/src)))
+
 SETROPTIONS := "options(Ncpus = ${NCPUS})"
 
 EXPECTED_ROXYGEN_VERSION := 7.3.2
@@ -101,7 +103,7 @@ depends = .doc/$(1) .install/$(1) .check/$(1) .test/$(1)
 
 ### Rules
 
-.PHONY: all install check test document shiny \
+.PHONY: all install check test document clean shiny \
             check_base check_models check_modules document help
 
 all: install document
@@ -165,8 +167,9 @@ include Makefile.depends
 
 clean: 
 	rm -rf .install .check .test .doc
-	find modules/rtm/src \( -name \*.mod -o -name \*.o -o -name \*.so \) -delete
-	find models/basgra/src \( -name \*.mod -o -name \*.o -o -name \*.so \) -delete
+	for p in $(SRC_PKGS); do \
+		find "$$p" \( -name \*.mod -o -name \*.o -o -name \*.so \) -delete; \
+	done
 
 .install/devtools: | .install
 	+ ./scripts/time.sh "devtools ${1}" Rscript -e ${SETROPTIONS} -e "if(!requireNamespace('devtools', quietly = TRUE)) install.packages('devtools')"
