@@ -139,7 +139,7 @@ help:
 	@echo "Examples:"
 	@echo "  make all"
 	@echo "  make document"
-	@echo "  make document modules/assim.sequential  # Generate documentation for a specific package"
+	@echo "  make .doc/modules/assim.sequential  # Generate documentation for a specific package"
 	@echo ""
 	@echo "Notes:"
 	@echo "  - Components not included: cable (models), data.mining and DART (modules)."
