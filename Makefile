@@ -44,7 +44,7 @@ MODELS_D := $(MODELS:%=.doc/%)
 MODULES_D := $(MODULES:%=.doc/%)
 ALL_PKGS_D := $(BASE_D) $(MODULES_D) $(MODELS_D)
 
-SRC_PKGS := $(strip $(foreach d,$(ALL_PKGS),$(wildcard ${d}/src)))
+SRCS_TO_CLEAN := $(strip $(foreach d,$(ALL_PKGS),$(wildcard ${d}/src)))
 
 SETROPTIONS := "options(Ncpus = ${NCPUS})"
 
@@ -127,6 +127,12 @@ book:
 .doc .install .check .test .shiny_depends $(call depends,base) $(call depends,models) $(call depends,modules):
 	mkdir -p $@
 
+clean:
+	rm -rf .install .check .test .doc
+	for p in $(SRCS_TO_CLEAN); do \
+		find "$$p" \( -name \*.mod -o -name \*.o -o -name \*.so \) -delete; \
+	done
+
 help:
 	@echo "Usage: make [target]"
 	@echo ""
@@ -164,12 +170,6 @@ $(subst .doc/models/template,,$(MODELS_D)): .install/models/template
 # (i.e. prerequisites must exist before building target, but
 # target need not be rebuilt when a prerequisite changes)
 include Makefile.depends
-
-clean: 
-	rm -rf .install .check .test .doc
-	for p in $(SRC_PKGS); do \
-		find "$$p" \( -name \*.mod -o -name \*.o -o -name \*.so \) -delete; \
-	done
 
 .install/devtools: | .install
 	+ ./scripts/time.sh "devtools ${1}" Rscript -e ${SETROPTIONS} -e "if(!requireNamespace('devtools', quietly = TRUE)) install.packages('devtools')"
