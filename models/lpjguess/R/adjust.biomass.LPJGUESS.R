@@ -11,7 +11,6 @@
 ##' @param k_latosa The leaf area to sapwood area ratio (per PFT parameter)
 ##' @param k_allom2,k_allom3, Allometry coefficients (per PFT parameters)
 ##' @param wooddens Wood density (kgC/m^2) (per PFT parameter)
-##' @param crownarea_max Maximum allowed crown area (m^2)  (per PFT parameter)
 ##' @param lifeform An integer code for the lifeform of this individual (cohort): 1 = Tree, 2 = Grass
 ##' 
 ##' The changes in C pools are determined by the allocation.  The changes in the N pools are designed to 

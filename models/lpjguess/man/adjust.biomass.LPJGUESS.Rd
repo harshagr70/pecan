@@ -38,8 +38,6 @@ This is implemented in the \code{updateState} function following the call to thi
 \item{k_latosa}{The leaf area to sapwood area ratio (per PFT parameter)}
 
 \item{k_allom2, k_allom3, }{Allometry coefficients (per PFT parameters)}
-
-\item{crownarea_max}{Maximum allowed crown area (m^2)  (per PFT parameter)}
 }
 \value{
 the scaled 'individual' (the initial nested list with update values)
