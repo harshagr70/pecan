@@ -46,6 +46,10 @@ using state data assimilation from function XXXXXX}
 above ground stem biomass for each individual.  eg. 0.05 requires that the final above ground wood is within 5%
 of the target above ground wood}
 
+\item{trace}{Logical; if TRUE, prints detailed adjustment process information.}
+
+\item{min.diam}{Minimum tree diameter (in cm) for inclusion in adjustments.}
+
 \item{HEIGHT_MAX}{Maximum allowed height of an individual.  This is the maximum height that a tree
 can have.  This is hard-coded in LPJ-GUESS to 150 m, but for SDA that might be unrealistically big, 
 so this argument allows adjustment.}

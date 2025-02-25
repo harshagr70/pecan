@@ -9,6 +9,8 @@
 ##' @param variable A character string specifying what variable to extract.  This can be chosen based on the LPJ-GUESS variable name
 ##' as recorded in the big list of list (that represents describes the model state in R).  Once special case is "biomass" which
 ##' returns the sum of "cmass_leaf", "cmass_root", "cmass_sap" and "cmass_heart"  
+##' @param pft.params A data frame containing PFT parameters such as allometric coefficients.
+##' @param min.diam Minimum tree diameter (in cm) required for inclusion in calculations.
 ##' @return  A numeric vector, with one entry per PFT
 ##' @export
 ##' @author Matthew Forrest
