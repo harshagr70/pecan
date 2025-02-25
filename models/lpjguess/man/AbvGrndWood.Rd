@@ -2,11 +2,19 @@
 % Please edit documentation in R/update.state.LPJGUESS.R
 \name{AbvGrndWood}
 \alias{AbvGrndWood}
-\title{Calculate Above Ground Woody Biomass}
+\title{AbvGrndWood}
 \usage{
 AbvGrndWood(individual, include.debt = TRUE)
 }
+\arguments{
+\item{individual}{A nested list representing an LPJ-GUESS individual from a binary state file.}
+
+\item{include.debt}{Logical; if TRUE, includes carbon mass debt in the calculation.}
+}
+\value{
+A numeric value representing the above-ground woody biomass (kgC/m²).
+}
 \description{
-Calculate Above Ground Woody Biomass
+Calculates the above-ground woody biomass of an LPJ-GUESS individual.
 }
 \keyword{internal}

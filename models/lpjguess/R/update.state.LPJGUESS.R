@@ -1,5 +1,11 @@
-##'  Calculate Above Ground Woody Biomass
-
+##' @title AbvGrndWood
+##'
+##' @description Calculates the above-ground woody biomass of an LPJ-GUESS individual.
+##'
+##' @param individual A nested list representing an LPJ-GUESS individual from a binary state file.
+##' @param include.debt Logical; if TRUE, includes carbon mass debt in the calculation.
+##'
+##' @return A numeric value representing the above-ground woody biomass (kgC/m²).
 ##' @keywords internal
 AbvGrndWood <- function(individual, include.debt = TRUE){
   
@@ -15,8 +21,14 @@ AbvGrndWood <- function(individual, include.debt = TRUE){
   
 }
 
-##'  Calculate Above Ground Woody Biomass
-
+##' @title TotalCarbon
+##'
+##' @description Calculates the total carbon content of an LPJ-GUESS individual.
+##'
+##' @param individual A nested list representing an LPJ-GUESS individual from a binary state file.
+##' @param include.debt Logical; if TRUE, includes carbon mass debt in the calculation.
+##'
+##' @return A numeric value representing the total carbon content (kgC/m²).
 ##' @keywords internal
 TotalCarbon <- function(individual, include.debt = TRUE){
   

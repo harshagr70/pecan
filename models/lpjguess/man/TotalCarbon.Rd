@@ -2,11 +2,19 @@
 % Please edit documentation in R/update.state.LPJGUESS.R
 \name{TotalCarbon}
 \alias{TotalCarbon}
-\title{Calculate Above Ground Woody Biomass}
+\title{TotalCarbon}
 \usage{
 TotalCarbon(individual, include.debt = TRUE)
 }
+\arguments{
+\item{individual}{A nested list representing an LPJ-GUESS individual from a binary state file.}
+
+\item{include.debt}{Logical; if TRUE, includes carbon mass debt in the calculation.}
+}
+\value{
+A numeric value representing the total carbon content (kgC/m²).
+}
 \description{
-Calculate Above Ground Woody Biomass
+Calculates the total carbon content of an LPJ-GUESS individual.
 }
 \keyword{internal}

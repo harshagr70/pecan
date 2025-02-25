@@ -6,13 +6,13 @@
 ##' adjustments to the litter pools.
 ##' 
 ##' @param individual A nested list which encapsulates an LPJ-GUESS 'Individual' as read from a binary state file
-##' @param rel.change A numeric by which to scale the density and C and N pools
+##' @param biomass.inc A numeric value specifying the biomass increment to be applied.
 ##' @param sla The SLA (specific leaf area) (per PFT parameter)
+##' @param wooddens Wood density (kgC/m^2) (per PFT parameter)
+##' @param lifeform An integer code for the lifeform of this individual (cohort): 1 = Tree, 2 = Grass
 ##' @param k_latosa The leaf area to sapwood area ratio (per PFT parameter)
 ##' @param k_allom2,k_allom3, Allometry coefficients (per PFT parameters)
-##' @param wooddens Wood density (kgC/m^2) (per PFT parameter)
-##' @param crownarea_max Maximum allowed crown area (m^2)  (per PFT parameter)
-##' @param lifeform An integer code for the lifeform of this individual (cohort): 1 = Tree, 2 = Grass
+##' @param trace Logical; if TRUE, prints details of biomass adjustment process.
 ##' 
 ##' The changes in C pools are determined by the allocation.  The changes in the N pools are designed to 
 ##' maintain the pre-exisiing C:N ratios, so N is just scaled using the updated C with the initial C:N ratio.
@@ -27,7 +27,7 @@
 ##' @keywords internal
 ##' @return the scaled 'individual' (the initial nested list with update values)
 ##' @author Matthew Forrest
-adjust.biomass.LPJGUESS <- function(individual, biomass.inc,  sla, wooddens, lifeform, k_latosa, k_allom2, k_allom3, trace = TRUE){
+adjust.biomass.LPJGUESS <- function(individual, biomass.inc, sla, wooddens, lifeform, k_latosa, k_allom2, k_allom3, trace = TRUE){
   
   # dummy input values to the allocation function below
   # note that they are not actually updated by the function, the updated values are in the returned list
