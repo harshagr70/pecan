@@ -21,13 +21,13 @@
 ##' 
 ##' Note that after this function is called the function \code{allometry} should be used to update the individual
 ##' and to check that the newly updated individual has a 'valid' allometry. The litter pools should also be updated.
-##' This is implemented in the \code{updateState} function following the call to this \code{adjustBiomass} function. 
+##' This is implemented in the \code{update.state.LPJGUESS} function following the call to this \code{adjust.biomass.LPJGUESS} function. 
 ##' 
 ##' 
 ##' @keywords internal
 ##' @return the scaled 'individual' (the initial nested list with update values)
 ##' @author Matthew Forrest
-adjust.biomass.LPJGUESS <- function(individual, rel.change,  sla, wooddens, lifeform, k_latosa, k_allom2, k_allom3){
+adjust.biomass.LPJGUESS <- function(individual, biomass.inc,  sla, wooddens, lifeform, k_latosa, k_allom2, k_allom3, trace = TRUE){
   
   # dummy input values to the allocation function below
   # note that they are not actually updated by the function, the updated values are in the returned list
@@ -41,9 +41,12 @@ adjust.biomass.LPJGUESS <- function(individual, rel.change,  sla, wooddens, life
   exceeds_cmass <- 0
   
   # calculate the total biomass and the absolute change based on this
-  biomass.total <- individual$cmass_leaf+individual$cmass_root+individual$cmass_heart+individual$cmass_sap-individual$cmass_debt
-  biomass.inc <- (biomass.total * rel.change) - biomass.total
-  
+  biomass.total <- TotalCarbon(individual)
+  rel.change <- (biomass.total + biomass.inc) / biomass.total
+  if(trace) {
+    print(paste(" ------- DURING BIOMASS ADJUSTMENT -------"))
+    print(paste(" ***** Total Biomass Increment =", biomass.inc))
+  }
   
   updated.pools <- allocation(
     # vegetation state

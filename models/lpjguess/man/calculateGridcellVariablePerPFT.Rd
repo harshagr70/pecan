@@ -4,7 +4,12 @@
 \alias{calculateGridcellVariablePerPFT}
 \title{calculateGridcellVariablePerPFT}
 \usage{
-calculateGridcellVariablePerPFT(model.state, variable)
+calculateGridcellVariablePerPFT(
+  model.state,
+  variable,
+  pft.params,
+  min.diam = 5
+)
 }
 \arguments{
 \item{model.state}{A large multiply-nested list containing the entire LPJ-GUESS state as read by 
